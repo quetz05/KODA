@@ -1,0 +1,5 @@
+rootProject.name = 'koda'
+
+include 'koda-app'
+
+include 'koda-generator'

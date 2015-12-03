@@ -1,0 +1,30 @@
+# Intellij
+.idea/
+out/
+*.iml
+*.iws
+*.war
+*.MF
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/
+
+
+# Gradle
+.gradle
+koda-*/build
+**/gradlew.bat
+**/gradlew
+**/gradle-wrapper.properties
+
+# Ubuntu przy modyfikacji
+*~
+
+classes/
+
+# Pluginy
+atlassian-ide-plugin.xml

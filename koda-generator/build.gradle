@@ -1,0 +1,14 @@
+dependencies {
+}
+
+task fatJar(type: Jar) {
+
+    manifest {
+        attributes 'Main-Class': 'es.elka.koda.generator.Application'
+    }
+
+    baseName = project.name + '-all'
+
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}

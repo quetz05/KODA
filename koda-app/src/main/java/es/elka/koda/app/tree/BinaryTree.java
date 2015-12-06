@@ -13,7 +13,9 @@ public class BinaryTree {
         newNode.weight = weight;
 
         if(root == null)
+        {
             root = newNode;
+        }
         else
         {
             Node focusNode = root;
@@ -25,22 +27,49 @@ public class BinaryTree {
 
                 if(weight < focusNode.weight)
                 {
-                    
-
+                    focusNode = focusNode.leftChild;
+                    if(focusNode == null)
+                    {
+                        parent.leftChild = newNode;
+                        return;
+                    }
                 }
-
+                else
+                {
+                    focusNode = focusNode.rightChild;
+                    if(focusNode == null)
+                    {
+                        parent.rightChild = newNode;
+                        return;
+                    }
+                }
             }
-
-
         }
 
 
     }
 
-    public BinaryTree()
+    public Node findNode(char symbol)
     {
-
+        return findNode(symbol, root);
     }
 
+    private Node findNode(char symbol, Node node)
+    {
+        if(node != null)
+        {
+            if(node.symbol == symbol)
+                return node;
+            else
+            {
+                Node foundNode = findNode(symbol,node.leftChild);
+                if(foundNode == null)
+                    foundNode = findNode(symbol,node.rightChild);
+                return foundNode;
+            }
+        }
+        else
+            return null;
+    }
 
 }

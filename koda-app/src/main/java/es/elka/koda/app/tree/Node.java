@@ -7,17 +7,24 @@ package es.elka.koda.app.tree;
  */
 public class Node {
 
+    public int weight;
+    public int index;
+    public char symbol;
+    public Node leftChild;
+    public Node rightChild;
+
     /**
      * Konstruktor węzła
      *
      * @param symbol znak alfabetu (klucz węzła)
      * @param weight waga węzła
+     * @param index indeks węzła
      */
-    public Node(char symbol, int weight)
+    public Node(char symbol, int weight, int index)
     {
         this.weight = weight;
         this.symbol = symbol;
-
+        this.index = index;
         this.leftChild = null;
         this.rightChild = null;
     }
@@ -34,9 +41,4 @@ public class Node {
         else
             return false;
     }
-
-    int weight;
-    char symbol;
-    Node leftChild;
-    Node rightChild;
 }

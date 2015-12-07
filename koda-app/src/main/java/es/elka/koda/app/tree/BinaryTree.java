@@ -5,7 +5,7 @@ package es.elka.koda.app.tree;
  */
 public class BinaryTree {
 
-    Node root;
+    private Node root;
 
     public void addNode(char symbol, int weight)
     {

@@ -3,7 +3,10 @@ package es.elka.koda.app.tree;
 /**
  * Created by Quetz on 2015-12-06.
  *
- * Klasa węzła dla drzewa binarnego (o maksymalnie dwóch potomkach)
+ * Klasa węzła dla drzewa Huffmana zawierająca symbol, indeks, wagę
+ * oraz wskazania na ewentualnych potomków (lewego i/lub prawego).
+ *
+ * @see HuffmanTree
  */
 public class Node {
 
@@ -16,9 +19,9 @@ public class Node {
     /**
      * Konstruktor węzła
      *
-     * @param symbol znak alfabetu (klucz węzła)
+     * @param symbol znak alfabetu
      * @param weight waga węzła
-     * @param index indeks węzła
+     * @param index indeks węzła (klucz węzła)
      */
     public Node(char symbol, int weight, int index)
     {

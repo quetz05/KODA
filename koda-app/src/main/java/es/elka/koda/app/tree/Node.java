@@ -63,6 +63,19 @@ public class Node {
     }
 
     /**
+     * Konstruktor kopiujący.
+     * @param node węzeł kopiowany
+     */
+    public Node(Node node)
+    {
+        this.weight = node.weight;
+        this.symbol = node.symbol;
+        this.index = node.index;
+        this.leftChild = node.leftChild;
+        this.rightChild = node.rightChild;
+    }
+
+    /**
      * Metoda sprawdzająca czy dany węzeł jest liściem (nie ma potomków)
      *
      * @return true jeśli węzeł jest liściem, false w przeciwnym wypadku

@@ -26,6 +26,14 @@ public class HuffmanTree {
      */
     public List<Node> nodeList;
 
+    /**
+     * Konstruktor drzewa Huffmana.
+     */
+    public HuffmanTree()
+    {
+        nodeList = new ArrayList<>();
+    }
+
 
     /**
      * Metoda dodająca węzeł do drzewa, zgodnie z poniższym algorytmem:
@@ -47,20 +55,42 @@ public class HuffmanTree {
         if(root == null)
         {
             root = newNode;
+            currentSmallestNode = root;
             root.weight++;
             root.index = 1;
         }
+        else if(root.isLeaf())
+        {
+            Node emptyNode = new Node(currentSmallestNode.weight);
+            nodeList.add(emptyNode);
+
+            Node temp = root;
+
+            emptyNode.leftChild = newNode;
+            emptyNode.rightChild = temp;
+            root = emptyNode;
+
+            root.weight ++;
+            newNode.weight++;
+
+            root.leftChild.index = 1;
+            root.rightChild.index = 2;
+            root.index = 3;
+
+            currentSmallestNode = newNode;
+        }
         else
         {
-            ArrayDeque<Node> path = new ArrayDeque<>();
             // szukanie ścieżki w celu zmiany wskazań węzłów
+            ArrayDeque<Node> path = new ArrayDeque<>();
             getPath(root,currentSmallestNode, path);
+
+            // stworzenie nowego węzła pośredniego
+            Node emptyNode = new Node(currentSmallestNode.weight);
 
             // dostęp do 'ojca' najmniejszego węzła
             path.removeFirst();
             Node parent =  path.getFirst();
-            // stworzenie nowego węzła pośredniego
-            Node emptyNode = new Node(currentSmallestNode.weight);
 
             // 'przepięcia' wskaźników na węzły - faktyczne dodanie nowego węzła do drzewa
             parent.leftChild = emptyNode;
@@ -68,25 +98,28 @@ public class HuffmanTree {
             emptyNode.leftChild = newNode;
             currentSmallestNode = newNode;
 
-            // zwiększenie wag odpowiednich węzłów
-            newNode.weight++;
-            for(Node n : path)
-                n.weight++;
 
             // zmiana indeksów modyfikowanych węzłów
             newNode.index = 1;
             emptyNode.rightChild.index = 2;
             emptyNode.index = 3;
 
+            // zwiększenie wag odpowiednich węzłów
+            newNode.weight++;
+            for(Node n : path)
+                n.weight++;
+
             // zwiększenie indeksów pozostałych węzłów
             for(Node n : nodeList)
                 if(n != emptyNode.leftChild && n != emptyNode.rightChild)
                     n.index += 2;
+
             // dodanie do listy węzłów nowego, pustego węzła
             nodeList.add(emptyNode);
 
             // TODO - odpowiednie przemieszczenie węzłów drzewa w związku ze zmianą indeksów
             doOrdering(newNode);
+
         }
     }
 
@@ -131,8 +164,10 @@ public class HuffmanTree {
         if(beginNode == searchedNode ||
                 getPath(beginNode.leftChild, searchedNode, path) ||
                 getPath(beginNode.rightChild, searchedNode, path))
-            path.add(root);
-
+        {
+            path.add(beginNode);
+            return true;
+        }
         return false;
     }
 
@@ -166,5 +201,31 @@ public class HuffmanTree {
         nodeList.clear();
         // TODO zrobić pełne czyszczenie
 
+    }
+
+    /**
+     * Metoda drukująca całe drzewo na konsolę.
+     */
+    public void print()
+    {
+        printNode(root,"|----");
+    }
+
+    /**
+     * Metoda drukująca konkretne poddrzewo na konsolę.
+     *
+     * @param node korzeń poddrzewa, które ma być drukowane
+     * @param tabulator tabulator, dzięki któremu wyświetlone drzewo jest bardziej przejrzyste
+     */
+    private void printNode(Node node, String tabulator)
+    {
+        if(node != null)
+        {
+            System.out.println(tabulator + node.symbol + " [" + node.index + "," + node.weight + "]");
+            tabulator = "   " + tabulator;
+
+            printNode(node.leftChild, tabulator);
+            printNode(node.rightChild, tabulator);
+        }
     }
 }

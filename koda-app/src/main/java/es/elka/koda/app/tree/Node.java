@@ -33,6 +33,36 @@ public class Node {
     }
 
     /**
+     * Konstruktor węzła właściwego/liścia (gdzie ważny jest symbol) z wyzerowanymi wartościami wagi i indeksu
+     *
+     * @param symbol znak alfabetu
+     */
+    public Node(char symbol)
+    {
+        this.weight = 0;
+        this.symbol = symbol;
+        this.index = 0;
+        this.leftChild = null;
+        this.rightChild = null;
+    }
+
+
+    /**
+     * Kostruktor 'pustego' węzła pośredniego, w którym istotna
+     * jest jedynie waga i indeks (który przy inicjalizacju wynosi 0)
+     *
+     * @param weight
+     */
+    public Node(int weight)
+    {
+        this.weight = weight;
+        this.symbol = 0;
+        this.index = 0;
+        this.leftChild = null;
+        this.rightChild = null;
+    }
+
+    /**
      * Metoda sprawdzająca czy dany węzeł jest liściem (nie ma potomków)
      *
      * @return true jeśli węzeł jest liściem, false w przeciwnym wypadku

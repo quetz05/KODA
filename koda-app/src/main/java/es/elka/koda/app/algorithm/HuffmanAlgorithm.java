@@ -42,14 +42,7 @@ public class HuffmanAlgorithm {
         // jeśli symbol jest już w drzewie
         if(node != null)
         {
-            // ustalenie ścieżki do węzła
-            ArrayDeque<Node> path = tree.getPath(node);
-
-            // inkrementacja wagi wszystkich węzłów ze ścieżki
-            for (Node n : path)
-                node.weight++;
-
-            // porządkowanie drzewa po zwiększeniu wag
+            // porządkowanie drzewa ze zwiększeniem wag
             tree.doOrdering(node);
         }
         // jeśli symbolu jeszcze nie ma w drzewie
@@ -57,13 +50,20 @@ public class HuffmanAlgorithm {
         {
             // stworzenie nowego węzła
             Node newNode = new Node(symbol);
+            // umieszczenie węzła w drzewie
+            tree.addNode(newNode);
             // umieszczenie węzła w mapie (na miejscu węzła o najmniejszej wadze)
             nodes.put(symbol, newNode);
-            // umieszczenie węzła w drzewie
-            tree.addNode(node);
-
-            // po dodaniu węzła doOrdering wykonuje się automatycznie, więc nie trzeba do wywołyawć po raz drugi
         }
 
+    }
+
+    /**
+     * Metoda drukująca drzewo na ekran.
+     *
+     */
+    public void printTree()
+    {
+        tree.print();
     }
 }

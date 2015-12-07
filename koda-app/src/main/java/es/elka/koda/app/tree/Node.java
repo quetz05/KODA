@@ -15,6 +15,7 @@ public class Node {
     public char symbol;
     public Node leftChild;
     public Node rightChild;
+    public Node parent;
 
     /**
      * Konstruktor węzła
@@ -28,8 +29,6 @@ public class Node {
         this.weight = weight;
         this.symbol = symbol;
         this.index = index;
-        this.leftChild = null;
-        this.rightChild = null;
     }
 
     /**
@@ -42,8 +41,6 @@ public class Node {
         this.weight = 0;
         this.symbol = symbol;
         this.index = 0;
-        this.leftChild = null;
-        this.rightChild = null;
     }
 
 
@@ -58,8 +55,6 @@ public class Node {
         this.weight = weight;
         this.symbol = 0;
         this.index = 0;
-        this.leftChild = null;
-        this.rightChild = null;
     }
 
     /**
@@ -73,6 +68,7 @@ public class Node {
         this.index = node.index;
         this.leftChild = node.leftChild;
         this.rightChild = node.rightChild;
+        this.parent = node.parent;
     }
 
     /**

@@ -66,4 +66,31 @@ public class HuffmanAlgorithm {
     {
         tree.print();
     }
+
+    /**
+     * Metoda odczytująca wartość klucza w postaci ciągu bitów dla danego węzła drzewa
+     * @param node węzeł drzewa, dla którego ma zostać policzony klucz
+     * @return klucz w formie ciągu bitów
+     */
+    private BitSet getSymbolKey(Node node)
+    {
+        BitSet key = new BitSet();
+
+        // TODO Funkcja tworząca klucz na podstawie ścieżki od node'a
+
+        return key;
+    }
+
+    /**
+     * Metoda tworząca słownik dla symboli na podstawie drzewa
+     * @return słownik w postaci <Symbol, Ciąg bitów>
+     */
+    public Dictionary<Character, BitSet> createDictionary()
+    {
+        Dictionary<Character, BitSet> dictionary = new Hashtable<>();
+
+        //TODO Funkcja tworząca słownik
+
+        return dictionary;
+    }
 }

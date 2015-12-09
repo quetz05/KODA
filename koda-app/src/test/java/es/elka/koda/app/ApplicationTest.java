@@ -6,18 +6,10 @@ import org.junit.Test;
 public class ApplicationTest {
 
     @Test
-    public void shouldDoSomeQuetzThing() {
+    public void treeAlgorithmTest() {
         HuffmanAlgorithm algo = new HuffmanAlgorithm();
-
-        algo.addSymbol('a');
-        algo.addSymbol('b');
-        algo.addSymbol('c');
-        algo.addSymbol('d');
-
-        algo.printTree();
-        System.out.println();
-
-        algo.addSymbol('d');
+        byte data[] = {1,2,3,4,5,5,5,3,3,3,1,1,2};
+        algo.run(data);
         algo.printTree();
     }
 }

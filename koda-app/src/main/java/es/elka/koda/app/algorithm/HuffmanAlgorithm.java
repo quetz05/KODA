@@ -24,7 +24,7 @@ public class HuffmanAlgorithm {
      */
     public HuffmanAlgorithm()
     {
-        nodes = new HashMap<>();
+        nodes = new HashMap<Byte, Node>();
         tree = new HuffmanTree();
     }
 
@@ -36,7 +36,7 @@ public class HuffmanAlgorithm {
      *
      * @param symbol kolejny symbol występujący w strumieniu danych
      */
-    public void addSymbol(byte symbol)
+    private void addSymbol(byte symbol)
     {
         Node node = nodes.get(symbol);
         // jeśli symbol jest już w drzewie
@@ -56,6 +56,20 @@ public class HuffmanAlgorithm {
             nodes.put(symbol, newNode);
         }
 
+    }
+
+    /**
+     * Metoda przyjmująca dane (ciąg bajtów) i na ich podstawie tworząca drzewo,
+     * które posłuży potem do stworzenia słownika i zakodowania danych
+     *
+     * @param data dane
+     */
+    public void run(byte data[])
+    {
+        for (byte b : data)
+        {
+            addSymbol(b);
+        }
     }
 
     /**
@@ -95,9 +109,7 @@ public class HuffmanAlgorithm {
      */
     public Map<Byte, BitSet> createDictionary()
     {
-        Map<Byte, BitSet> dictionary = new HashMap<>();
-
-        //TODO Funkcja tworząca słownik
+        Map<Byte, BitSet> dictionary = new HashMap<Byte, BitSet>();
         for(Map.Entry<Byte, Node> entry : nodes.entrySet())
         {
             dictionary.put(entry.getKey(), getSymbolKey(entry.getValue()));

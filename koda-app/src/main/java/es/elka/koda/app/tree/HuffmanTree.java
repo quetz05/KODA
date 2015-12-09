@@ -31,7 +31,7 @@ public class HuffmanTree {
      */
     public HuffmanTree()
     {
-        nodeList = new ArrayList<>();
+        nodeList = new ArrayList<Node>();
     }
 
 
@@ -88,7 +88,7 @@ public class HuffmanTree {
             // TODO - uproszczenie po dodaniu parenta
 
             // szukanie ścieżki w celu zmiany wskazań węzłów
-            Vector<Node> path = new Vector<>();
+            Vector<Node> path = new Vector<Node>();
             getPath(root,currentSmallestNode, path);
 
             // stworzenie nowego węzła pośredniego
@@ -160,7 +160,7 @@ public class HuffmanTree {
      */
     public Vector<Node> getPath(Node searchedNode)
     {
-        Vector<Node> path = new Vector<>();
+        Vector<Node> path = new Vector<Node>();
         getPath(root, searchedNode, path);
         return path;
     }

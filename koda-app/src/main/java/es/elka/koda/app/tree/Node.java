@@ -12,7 +12,7 @@ public class Node {
 
     public int weight;
     public int index;
-    public char symbol;
+    public byte symbol;
     public Node leftChild;
     public Node rightChild;
     public Node parent;
@@ -24,7 +24,7 @@ public class Node {
      * @param weight waga węzła
      * @param index indeks węzła (klucz węzła)
      */
-    public Node(char symbol, int weight, int index)
+    public Node(byte symbol, int weight, int index)
     {
         this.weight = weight;
         this.symbol = symbol;
@@ -36,7 +36,7 @@ public class Node {
      *
      * @param symbol znak alfabetu
      */
-    public Node(char symbol)
+    public Node(byte symbol)
     {
         this.weight = 0;
         this.symbol = symbol;

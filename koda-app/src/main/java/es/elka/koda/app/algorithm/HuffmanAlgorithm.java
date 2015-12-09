@@ -16,7 +16,7 @@ public class HuffmanAlgorithm {
     /**
      * Mapa hashująca zawierająca węzły drzewa z symbolami - przyspiesza sprawdzanie czy węzeł o danym symbolu jest w drzewie
      */
-    private Dictionary<Character, Node> nodes;
+    private Map<Byte, Node> nodes;
     private HuffmanTree tree;
 
     /**
@@ -24,7 +24,7 @@ public class HuffmanAlgorithm {
      */
     public HuffmanAlgorithm()
     {
-        nodes = new Hashtable<>();
+        nodes = new HashMap<>();
         tree = new HuffmanTree();
     }
 
@@ -36,7 +36,7 @@ public class HuffmanAlgorithm {
      *
      * @param symbol kolejny symbol występujący w strumieniu danych
      */
-    public void addSymbol(char symbol)
+    public void addSymbol(byte symbol)
     {
         Node node = nodes.get(symbol);
         // jeśli symbol jest już w drzewie
@@ -68,16 +68,24 @@ public class HuffmanAlgorithm {
     }
 
     /**
-     * Metoda odczytująca wartość klucza w postaci ciągu bitów dla danego węzła drzewa
+     * Metoda odczytująca wartość klucza w postaci ciągu bitów dla danego węzła drzewa (zasada: idąc od korzenia - w lewo 0, w prawo 1)
      * @param node węzeł drzewa, dla którego ma zostać policzony klucz
      * @return klucz w formie ciągu bitów
      */
     private BitSet getSymbolKey(Node node)
     {
+        Vector<Node> path = tree.getPath(node);
+        Collections.reverse(path);
         BitSet key = new BitSet();
+        key.set(path.size() - 1);
 
-        // TODO Funkcja tworząca klucz na podstawie ścieżki od node'a
-
+        for(int i = 0; i <path.size()-1; i++)
+        {
+            if(path.get(i).leftChild == path.get(i+1))
+                key.set(i,false);
+            else
+                key.set(i,true);
+        }
         return key;
     }
 
@@ -85,11 +93,15 @@ public class HuffmanAlgorithm {
      * Metoda tworząca słownik dla symboli na podstawie drzewa
      * @return słownik w postaci <Symbol, Ciąg bitów>
      */
-    public Dictionary<Character, BitSet> createDictionary()
+    public Map<Byte, BitSet> createDictionary()
     {
-        Dictionary<Character, BitSet> dictionary = new Hashtable<>();
+        Map<Byte, BitSet> dictionary = new HashMap<>();
 
         //TODO Funkcja tworząca słownik
+        for(Map.Entry<Byte, Node> entry : nodes.entrySet())
+        {
+            dictionary.put(entry.getKey(), getSymbolKey(entry.getValue()));
+        }
 
         return dictionary;
     }

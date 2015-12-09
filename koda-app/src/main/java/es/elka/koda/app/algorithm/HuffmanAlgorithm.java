@@ -17,6 +17,7 @@ public class HuffmanAlgorithm {
      * Mapa hashująca zawierająca węzły drzewa z symbolami - przyspiesza sprawdzanie czy węzeł o danym symbolu jest w drzewie
      */
     private Map<Byte, Node> nodes;
+    private Map<Byte, BitSet> dictionary;
     private HuffmanTree tree;
 
     /**
@@ -26,6 +27,18 @@ public class HuffmanAlgorithm {
     {
         nodes = new HashMap<Byte, Node>();
         tree = new HuffmanTree();
+        dictionary = new HashMap<Byte, BitSet>();
+    }
+
+    /**
+     * Metoda czyszcząca zawartość danych: drzewa, listy węzłów oraz słownika
+     *
+     */
+    public void clearData()
+    {
+        nodes = new HashMap<Byte, Node>();
+        tree = new HuffmanTree();
+        dictionary = new HashMap<Byte, BitSet>();
     }
 
     /**
@@ -58,14 +71,19 @@ public class HuffmanAlgorithm {
 
     }
 
+
     /**
      * Metoda przyjmująca dane (ciąg bajtów) i na ich podstawie tworząca drzewo,
      * które posłuży potem do stworzenia słownika i zakodowania danych
      *
      * @param data dane
+     * @param clear true jeśli drzewo i słownik symboli mają być czyszczone przed użyciem, false w przeciwnym wypadku
      */
-    public void run(byte data[])
+    public void run(byte data[], boolean clear)
     {
+        if(clear)
+            clearData();
+
         for (byte b : data)
         {
             addSymbol(b);
@@ -79,6 +97,15 @@ public class HuffmanAlgorithm {
     public void printTree()
     {
         tree.print();
+    }
+
+    /**
+     * Metoda drukująca słownik na ekran.
+     */
+    public void printDictionary()
+    {
+        for(Map.Entry<Byte, Node> entry : nodes.entrySet())
+            System.out.println(entry.getKey() + ": " + getSymbolKey(entry.getValue()));
     }
 
     /**
@@ -104,17 +131,25 @@ public class HuffmanAlgorithm {
     }
 
     /**
-     * Metoda tworząca słownik dla symboli na podstawie drzewa
-     * @return słownik w postaci <Symbol, Ciąg bitów>
+     * Metoda tworząca słownik dla symboli na podstawie drzewa.
+     *
      */
-    public Map<Byte, BitSet> createDictionary()
+    public void createDictionary()
     {
-        Map<Byte, BitSet> dictionary = new HashMap<Byte, BitSet>();
+        dictionary = new HashMap<Byte, BitSet>();
         for(Map.Entry<Byte, Node> entry : nodes.entrySet())
         {
             dictionary.put(entry.getKey(), getSymbolKey(entry.getValue()));
         }
+    }
 
+    /**
+     * Metoda zwracająca istniejący słownik symboli.
+     *
+     * @return słownik w postaci <symbol, ciąg bitów>
+     */
+    public Map<Byte, BitSet> getDictionary()
+    {
         return dictionary;
     }
 }

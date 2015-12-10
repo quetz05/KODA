@@ -1,6 +1,7 @@
 package es.elka.koda.app.file;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -18,4 +19,6 @@ public interface FileToEncode {
      * @throws IOException
      */
     List<Byte> loadData() throws IOException;
+
+    Path getPath();
 }

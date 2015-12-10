@@ -1,7 +1,5 @@
 package es.elka.koda.app.file;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,6 +23,11 @@ public abstract class AbstractFileToEncode implements FileToEncode {
      */
     public AbstractFileToEncode(String path) {
         this.path = Paths.get(path);
+    }
+
+    @Override
+    public Path getPath() {
+        return this.path;
     }
 
     /**
@@ -56,7 +59,7 @@ public abstract class AbstractFileToEncode implements FileToEncode {
      */
     private List<Byte> mapToBytes(Stream<String> dataWithoutHeader) {
         return dataWithoutHeader
-                .flatMap(s -> Stream.of(ArrayUtils.toObject(s.getBytes())))
+                .flatMap(s -> s.chars().mapToObj(i -> (byte) i))
                 .collect(Collectors.toList());
     }
 

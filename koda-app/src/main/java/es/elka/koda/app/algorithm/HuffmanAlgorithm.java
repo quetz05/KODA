@@ -1,5 +1,6 @@
 package es.elka.koda.app.algorithm;
 
+import es.elka.koda.app.coder.HuffmanAlgorithmServer;
 import es.elka.koda.app.tree.HuffmanTree;
 import es.elka.koda.app.tree.Node;
 import java.util.*;
@@ -11,7 +12,7 @@ import java.util.*;
  *
  * @see HuffmanTree, Node
  */
-public class HuffmanAlgorithm {
+public class HuffmanAlgorithm implements HuffmanAlgorithmServer {
 
     /**
      * Mapa hashująca zawierająca węzły drzewa z symbolami - przyspiesza sprawdzanie czy węzeł o danym symbolu jest w drzewie
@@ -19,6 +20,16 @@ public class HuffmanAlgorithm {
     private Map<Byte, Node> nodes;
     private Map<Byte, BitSet> dictionary;
     private HuffmanTree tree;
+
+
+    /**
+     * Metoda inicjalizująca początkową postać drzewa.
+     */
+    public void initialize()
+    {
+        //TODO - zaimplementować inicjalizowanie drzewa - deterministyczne
+
+    }
 
     /**
      * Konstruktor algorytmu Huffmana
@@ -49,7 +60,7 @@ public class HuffmanAlgorithm {
      *
      * @param symbol kolejny symbol występujący w strumieniu danych
      */
-    private void addSymbol(byte symbol)
+    public void addAndModify(byte symbol)
     {
         Node node = nodes.get(symbol);
         // jeśli symbol jest już w drzewie
@@ -86,7 +97,7 @@ public class HuffmanAlgorithm {
 
         for (byte b : data)
         {
-            addSymbol(b);
+            addAndModify(b);
         }
     }
 

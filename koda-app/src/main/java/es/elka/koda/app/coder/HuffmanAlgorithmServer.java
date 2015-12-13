@@ -8,5 +8,7 @@ public interface HuffmanAlgorithmServer {
 
     void addAndModify(byte token);
 
+    void createDictionary();
+
     Map<Byte, BitSet> getDictionary();
 }

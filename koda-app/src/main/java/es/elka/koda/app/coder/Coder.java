@@ -31,6 +31,7 @@ public class Coder {
     public List<BitSet> encode(List<Byte> data) {
         algorithmServer.initialize();
         data.stream().forEach(algorithmServer::addAndModify);
+        algorithmServer.createDictionary();
         Map<Byte, BitSet> dictionary = algorithmServer.getDictionary();
         return data.stream().
                 map(dictionary::get).

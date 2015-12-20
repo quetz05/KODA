@@ -1,5 +1,5 @@
 dependencies {
-
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
 }
 
 task fatJar(type: Jar) {
@@ -13,3 +13,4 @@ task fatJar(type: Jar) {
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
+

@@ -31,7 +31,7 @@ public class HuffmanTree {
      */
     public HuffmanTree()
     {
-        nodeList = new ArrayList<>();
+        nodeList = new ArrayList<Node>();
     }
 
 
@@ -64,11 +64,14 @@ public class HuffmanTree {
             Node emptyNode = new Node(currentSmallestNode.weight);
             nodeList.add(emptyNode);
 
+            // 'przepięcia' węzłów
             Node temp = root;
-
             emptyNode.leftChild = newNode;
             emptyNode.rightChild = temp;
             root = emptyNode;
+            // przypisanie rodzica
+            root.leftChild.parent = root;
+            root.rightChild.parent = root;
 
             root.weight ++;
             newNode.weight++;
@@ -81,33 +84,36 @@ public class HuffmanTree {
         }
         else
         {
+
+            // TODO - uproszczenie po dodaniu parenta
+
             // szukanie ścieżki w celu zmiany wskazań węzłów
-            ArrayDeque<Node> path = new ArrayDeque<>();
+            Vector<Node> path = new Vector<Node>();
             getPath(root,currentSmallestNode, path);
 
             // stworzenie nowego węzła pośredniego
             Node emptyNode = new Node(currentSmallestNode.weight);
 
             // dostęp do 'ojca' najmniejszego węzła
-            path.removeFirst();
-            Node parent =  path.getFirst();
+            path.removeElementAt(0);
+            Node parent =  path.elementAt(0);
 
-            // 'przepięcia' wskaźników na węzły - faktyczne dodanie nowego węzła do drzewa
+            // 'przepięcia' węzłów - faktyczne dodanie nowego węzła do drzewa
             parent.leftChild = emptyNode;
             emptyNode.rightChild = currentSmallestNode;
             emptyNode.leftChild = newNode;
             currentSmallestNode = newNode;
+
+            // przypisanie rodzica
+            emptyNode.rightChild.parent = emptyNode;
+            emptyNode.leftChild.parent = emptyNode;
+            emptyNode.parent = parent;
 
 
             // zmiana indeksów modyfikowanych węzłów
             newNode.index = 1;
             emptyNode.rightChild.index = 2;
             emptyNode.index = 3;
-
-            // zwiększenie wag odpowiednich węzłów
-            newNode.weight++;
-            for(Node n : path)
-                n.weight++;
 
             // zwiększenie indeksów pozostałych węzłów
             for(Node n : nodeList)
@@ -117,34 +123,9 @@ public class HuffmanTree {
             // dodanie do listy węzłów nowego, pustego węzła
             nodeList.add(emptyNode);
 
-            // TODO - odpowiednie przemieszczenie węzłów drzewa w związku ze zmianą indeksów
             doOrdering(newNode);
-
         }
     }
-
-//    public Node findNode(int index)
-//    {
-//        return findNode(index, root);
-//    }
-//
-//    private Node findNode(int index, Node node)
-//    {
-//        if(node != null)
-//        {
-//            if(node.index == index)
-//                return node;
-//            else
-//            {
-//                Node foundNode = findNode(index,node.leftChild);
-//                if(foundNode == null)
-//                    foundNode = findNode(index,node.rightChild);
-//                return foundNode;
-//            }
-//        }
-//        else
-//            return null;
-//    }
 
     /**
      * Metoda szukająca ścieżki do konkretnego węzła w drzewie, ropoczynając od konkretnego węzła.
@@ -156,7 +137,7 @@ public class HuffmanTree {
      *
      * @return true jeśli ścieżka do węzła została znaleziona (węzeł istnieje), false w przeciwnym wypadku
      */
-    private Boolean getPath(Node beginNode, Node searchedNode, Deque<Node> path)
+    private Boolean getPath(Node beginNode, Node searchedNode, Vector<Node> path)
     {
         if(beginNode == null)
             return false;
@@ -177,19 +158,59 @@ public class HuffmanTree {
      * @param searchedNode szukany węzeł
      * @return ścieżka (w postaci klasy Deque<Node> kolejnych węzłów od szukanego węzła do korzenia
      */
-    public ArrayDeque<Node> getPath(Node searchedNode)
+    public Vector<Node> getPath(Node searchedNode)
     {
-        ArrayDeque<Node> path = new ArrayDeque<>();
+        Vector<Node> path = new Vector<Node>();
         getPath(root, searchedNode, path);
         return path;
     }
 
     /**
-     * Metoda przeglądająca drzewo od konkretnego węzła i porządkująca jego strukturę.
+     * Metoda przeglądająca drzewo od konkretnego węzła (któremu zwiększa wagę o 1) i porządkująca jego strukturę.
      */
     public void doOrdering(Node node)
     {
-        // TODO - algorytm porządkowania, wywoływany między innymi przy dodawaniu nowego węzła - PAMITAC O CURRENTSMALLESTNODE!!!!!
+        // TODO - algorytm porządkowania, duża złożoność przeszukiwania listy, może da się lepiej (teraz jest O(n))
+
+        node.weight++;
+
+        if(node == root)
+            return;
+
+        for(Node n : nodeList)
+            if(n.isLeaf() && node.isLeaf() && node.weight -1 == n.weight)
+            {
+                if(currentSmallestNode == node)
+                    currentSmallestNode = n;
+
+                swapNodes(node, n);
+                break;
+            }
+
+        if(node.parent == null)
+            System.out.println("O NIE!");
+        doOrdering(node.parent);
+    }
+
+    /**
+     * Metoda 'przepinająca' ze sobą dwa węzły (razem z poddrzewami).
+     *
+     * @param first pierwszy węzeł
+     * @param second drugi węzeł
+     */
+    private void swapNodes(Node first, Node second)
+    {
+        Node tempParent = first.parent;
+        Node tempLeft = first.leftChild;
+        Node tempRight = first.rightChild;
+
+        first.parent = second.parent;
+        first.leftChild = second.leftChild;
+        first.rightChild = second.rightChild;
+
+        second.parent = tempParent;
+        second.leftChild = tempLeft;
+        second.rightChild = tempRight;
     }
 
     /**

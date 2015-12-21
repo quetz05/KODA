@@ -89,7 +89,7 @@ public class HuffmanTree {
 
             // szukanie ścieżki w celu zmiany wskazań węzłów
             Vector<Node> path = new Vector<Node>();
-            getPath(root,currentSmallestNode, path);
+            getPath2(root,currentSmallestNode, path);
 
             // stworzenie nowego węzła pośredniego
             Node emptyNode = new Node(currentSmallestNode.weight);
@@ -123,7 +123,7 @@ public class HuffmanTree {
             // dodanie do listy węzłów nowego, pustego węzła
             nodeList.add(emptyNode);
 
-            doOrdering(newNode);
+            //doOrdering(newNode);
         }
     }
 
@@ -150,6 +150,20 @@ public class HuffmanTree {
             return true;
         }
         return false;
+    }
+
+    private Boolean getPath2(Node beginNode, Node searchedNode, Vector<Node> path)
+    {
+        Node temp = searchedNode;
+        while(true)
+        {
+            path.add(temp);
+            if (temp == beginNode)
+                break;
+            temp = temp.parent;
+
+        }
+        return true;
     }
 
     /**

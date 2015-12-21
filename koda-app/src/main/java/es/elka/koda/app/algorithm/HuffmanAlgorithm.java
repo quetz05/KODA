@@ -128,10 +128,9 @@ public class HuffmanAlgorithm implements HuffmanAlgorithmServer {
     {
         Vector<Node> path = tree.getPath(node);
         Collections.reverse(path);
-        BitSet key = new BitSet();
-        key.set(path.size() - 1);
+        BitSet key = new BitSet(path.size()-1);
 
-        for(int i = 0; i <path.size()-1; i++)
+        for(int i = 0; i <path.size() - 1; i++)
         {
             if(path.get(i).leftChild == path.get(i+1))
                 key.set(i,false);

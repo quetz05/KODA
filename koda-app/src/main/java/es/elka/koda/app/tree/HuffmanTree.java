@@ -123,6 +123,7 @@ public class HuffmanTree {
             // dodanie do listy węzłów nowego, pustego węzła
             nodeList.add(emptyNode);
 
+            // TODO - poprawa doOrdering
             //doOrdering(newNode);
         }
     }
@@ -137,20 +138,20 @@ public class HuffmanTree {
      *
      * @return true jeśli ścieżka do węzła została znaleziona (węzeł istnieje), false w przeciwnym wypadku
      */
-    private Boolean getPath(Node beginNode, Node searchedNode, Vector<Node> path)
-    {
-        if(beginNode == null)
-            return false;
-
-        if(beginNode == searchedNode ||
-                getPath(beginNode.leftChild, searchedNode, path) ||
-                getPath(beginNode.rightChild, searchedNode, path))
-        {
-            path.add(beginNode);
-            return true;
-        }
-        return false;
-    }
+//    private Boolean getPath(Node beginNode, Node searchedNode, Vector<Node> path)
+//    {
+//        if(beginNode == null)
+//            return false;
+//
+//        if(beginNode == searchedNode ||
+//                getPath(beginNode.leftChild, searchedNode, path) ||
+//                getPath(beginNode.rightChild, searchedNode, path))
+//        {
+//            path.add(beginNode);
+//            return true;
+//        }
+//        return false;
+//    }
 
     private Boolean getPath2(Node beginNode, Node searchedNode, Vector<Node> path)
     {
@@ -175,7 +176,7 @@ public class HuffmanTree {
     public Vector<Node> getPath(Node searchedNode)
     {
         Vector<Node> path = new Vector<Node>();
-        getPath(root, searchedNode, path);
+        getPath2(root, searchedNode, path);
         return path;
     }
 

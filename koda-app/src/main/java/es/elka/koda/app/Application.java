@@ -10,6 +10,7 @@ import es.elka.koda.app.file.PgmFileToEncode;
 import java.io.IOException;
 import java.util.BitSet;
 import java.util.List;
+import java.util.Map;
 
 public class Application {
     //Console console; coś takiego pewnie tutaj będzie
@@ -17,7 +18,13 @@ public class Application {
     private HuffmanAlgorithm huffmanAlgorithm = new HuffmanAlgorithm();
 
     public static void main(String[] args) {
+        Application application = new Application();
 
+        try {
+            application.code("test.pgm");
+        } catch (IOException e) {
+            System.err.println("Brak pliku test.pgm");
+        }
 
     }
 
@@ -33,5 +40,6 @@ public class Application {
         String fileName = fileToEncode.getPath().getFileName().toString();
         EncodedFile encodedFileToSave = new EncodedFileImpl(fileName);
         encodedFileToSave.save(encodedData);
+
     }
 }

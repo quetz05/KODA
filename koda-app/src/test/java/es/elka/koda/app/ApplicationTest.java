@@ -28,5 +28,6 @@ public class ApplicationTest {
 
         application.code("8x8.pgm");
 
+
     }
 }

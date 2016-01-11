@@ -10,7 +10,6 @@ import es.elka.koda.app.file.PgmFileToEncode;
 import java.io.IOException;
 import java.util.BitSet;
 import java.util.List;
-import java.util.Map;
 
 public class Application {
     //Console console; coś takiego pewnie tutaj będzie
@@ -39,7 +38,7 @@ public class Application {
         List<BitSet> encodedData = coder.encode(dataToEncode);
         String fileName = fileToEncode.getPath().getFileName().toString();
         EncodedFile encodedFileToSave = new EncodedFileImpl(fileName);
-        encodedFileToSave.save(encodedData);
+        encodedFileToSave.save(encodedData, huffmanAlgorithm.getDictionary());
 
     }
 }

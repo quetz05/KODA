@@ -9,9 +9,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.BitSet;
 import java.util.List;
+import java.util.Map;
 
 public class EncodedFileImpl implements EncodedFile {
     private final static String ENCODED_FILE_FORMAT = ".elkaes";
+    private final MapToArrayHelper mapToArrayHelper = new MapToArrayHelper();
     private Path pathToSave;
     private StringBuilder pathBuilder = new StringBuilder();
 
@@ -26,15 +28,6 @@ public class EncodedFileImpl implements EncodedFile {
         this.pathToSave = Paths.get(pathBuilder.toString());
     }
 
-    private static byte[] mapToByteArray(List<BitSet> dataToMap) {
-        byte[] mappedData = new byte[0];
-        for (BitSet bits : dataToMap) {
-            byte[] dataToAdd = bits.toByteArray();
-            mappedData = ArrayUtils.addAll(mappedData, dataToAdd);
-        }
-        return mappedData;
-    }
-
     private void formatFilePathAddDirection(String directionToSave) {
         pathBuilder.append(directionToSave);
         if (!directionToSave.endsWith(File.separator))
@@ -47,8 +40,11 @@ public class EncodedFileImpl implements EncodedFile {
     }
 
     @Override
-    public void save(List<BitSet> tokens) throws IOException {
-        byte[] bytes = mapToByteArray(tokens);
-        Files.write(pathToSave, bytes);
+    public void save(List<BitSet> tokens, Map<Byte, BitSet> dictionary) throws IOException {
+        byte[] dictionaryBytes = mapToArrayHelper.execute(dictionary);
+        byte[] dataBytes = mapToArrayHelper.execute(tokens);
+        Files.write(pathToSave, ArrayUtils.addAll(dictionaryBytes, dataBytes));
     }
+
+
 }

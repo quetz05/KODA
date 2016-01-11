@@ -4,10 +4,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.List;
+import java.util.*;
 
 public class EncodedFileTest {
     /*
@@ -17,12 +14,12 @@ public class EncodedFileTest {
      */
     @Test
     @Ignore
-    public void shouldWriteTestFile() throws IOException {
+    public void shouldWriteTestFileWithoutDictionary() throws IOException {
         String fileName = "test";
         EncodedFile file = new EncodedFileImpl(fileName);
         List<BitSet> sampleData = prepareData();
         System.out.println(sampleData);
-        file.save(sampleData);
+        file.save(sampleData, new HashMap<>());
     }
 
     private List<BitSet> prepareData() {

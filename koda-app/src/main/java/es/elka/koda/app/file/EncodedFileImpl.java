@@ -41,7 +41,7 @@ public class EncodedFileImpl implements EncodedFile {
 
     @Override
     public void save(List<BitSet> tokens, Map<Byte, BitSet> dictionary) throws IOException {
-        byte[] dictionaryBytes = mapToArrayHelper.execute(dictionary);
+        byte[] dictionaryBytes = mapToArrayHelper.execute(dictionary, tokens.size());
         byte[] dataBytes = mapToArrayHelper.execute(tokens);
         Files.write(pathToSave, ArrayUtils.addAll(dictionaryBytes, dataBytes));
     }

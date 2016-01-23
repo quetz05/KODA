@@ -1,0 +1,20 @@
+Pare slow odnosnie kododwania: plik zakodowany sklada sie z 2 czesci:
+1) slownik
+2) dane zakodowane
+
+Zacznijmy od struktury slownika:
+Dane skladaja sie z sekwencji nastepujacej struktury:
+<dana niezakodowana><dana zakodowana><bit kontynuacji>
+sekwencja konczy sie wtedy kiedy bit kontynuacji jest rowny 0, jezeli jest 1 to jest kontynuowana
+
+<dana niezakodowana> - ma rowno 8 bitow
+<dana zakododwana> - ma rowno 8 bitow, najprawodopobniej moze miec i 16 (dopytam sie quetza)
+<bit kontynuacji> - 1 bit
+
+ostatnim elementem slownika (bo bicie 0 ) jest ilosc symboli w slowniku (niech bedzie signed int -wiec 32 bity,
+jak trzeba bedzie wiecej to najwyzej zrobi sie unsigned)
+
+Struktura danych:
+To po prostu ciag bitow skladajacy sie kolejnych zakodowanych symboli. Wazne jest aby nie pogubic sie w liczeniu
+symboli. Wazne, zeby zwrocic uwage na ilosc syboli, poniewaz ostatnic bajt w przypadku gdy nie jest pelny bedzie
+dopelniany zerami

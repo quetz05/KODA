@@ -1,5 +1,7 @@
 package es.elka.koda.app.coder;
 
+import es.elka.koda.app.algorithm.BitsWrapper;
+
 import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
@@ -32,9 +34,10 @@ public class Coder {
         algorithmServer.initialize();
         data.stream().forEach(algorithmServer::addAndModify);
         algorithmServer.createDictionary();
-        Map<Byte, BitSet> dictionary = algorithmServer.getDictionary();
-        return data.stream().
-                map(dictionary::get).
-                collect(Collectors.toList());
+        Map<Byte, BitsWrapper> dictionary = algorithmServer.getDictionary();
+        return data.stream()
+                .map(dictionary::get)
+                .map(BitsWrapper::getBitSet)
+                .collect(Collectors.toList());
     }
 }

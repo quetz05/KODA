@@ -1,6 +1,7 @@
 package es.elka.koda.app.coder;
 
-import java.util.BitSet;
+import es.elka.koda.app.algorithm.BitsWrapper;
+
 import java.util.Map;
 
 public interface HuffmanAlgorithmServer {
@@ -10,5 +11,5 @@ public interface HuffmanAlgorithmServer {
 
     void createDictionary();
 
-    Map<Byte, BitSet> getDictionary();
+    Map<Byte, BitsWrapper> getDictionary();
 }

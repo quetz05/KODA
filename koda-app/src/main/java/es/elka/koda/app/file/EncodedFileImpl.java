@@ -1,6 +1,6 @@
 package es.elka.koda.app.file;
 
-import org.apache.commons.lang3.ArrayUtils;
+import es.elka.koda.app.algorithm.BitsWrapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +13,6 @@ import java.util.Map;
 
 public class EncodedFileImpl implements EncodedFile {
     private final static String ENCODED_FILE_FORMAT = ".elkaes";
-    private final MapToArrayHelper mapToArrayHelper = new MapToArrayHelper();
     private Path pathToSave;
     private StringBuilder pathBuilder = new StringBuilder();
 
@@ -40,10 +39,12 @@ public class EncodedFileImpl implements EncodedFile {
     }
 
     @Override
-    public void save(List<BitSet> tokens, Map<Byte, BitSet> dictionary) throws IOException {
-        byte[] dictionaryBytes = mapToArrayHelper.execute(dictionary, tokens.size());
-        byte[] dataBytes = mapToArrayHelper.execute(tokens);
-        Files.write(pathToSave, ArrayUtils.addAll(dictionaryBytes, dataBytes));
+    public void save(List<BitSet> tokens, Map<Byte, BitsWrapper> dictionary) throws IOException {
+        byte[] data = new MapToArrayHelper(dictionary)
+                .addDictionary(tokens.size())
+                .addEncodedData(tokens)
+                .toBuild();
+        Files.write(pathToSave, data);
     }
 
 

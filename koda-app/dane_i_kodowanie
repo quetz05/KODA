@@ -4,14 +4,16 @@ Pare slow odnosnie kododwania: plik zakodowany sklada sie z 2 czesci:
 
 Zacznijmy od struktury slownika:
 Dane skladaja sie z sekwencji nastepujacej struktury:
-<dana niezakodowana><dana zakodowana><bit kontynuacji>
-sekwencja konczy sie wtedy kiedy bit kontynuacji jest rowny 0, jezeli jest 1 to jest kontynuowana
+<dana niezakodowana><dlugosc danej zakodowanej><dana zakodowana>
 
 <dana niezakodowana> - ma rowno 8 bitow
-<dana zakododwana> - ma rowno 8 bitow, najprawodopobniej moze miec i 16 (dopytam sie quetza)
-<bit kontynuacji> - 1 bit
+<dlugosc danej zakodowanej> - dane moga miec dlugosc od 1 do 256 zatem 8 bitów
+<dana zakodowana> - ilosc bito jest rowna dlugosci wprowadzonej w <dlugosc danej zakodowanej>
 
-ostatnim elementem slownika (bo bicie 0 ) jest ilosc symboli w slowniku (niech bedzie signed int -wiec 32 bity,
+ostatnim elementem slownika są dwa symbole terminalne 0 (ciag 8 bitow o wartosci 0) oraz 0 (ciag 8 bitow o wartosci 0)
+wynika to z faktu, ze dlugosc danej zakododwanej musi byc rozna od 0, przy wartosc rownej 0 sygnalizuje sie zakonczenie
+wczytywania slownika
+ostatnim elementem slownika jest ilosc symboli w slowniku (niech bedzie signed int -wiec 32 bity,
 jak trzeba bedzie wiecej to najwyzej zrobi sie unsigned)
 
 Struktura danych:

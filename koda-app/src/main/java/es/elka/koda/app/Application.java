@@ -2,6 +2,7 @@ package es.elka.koda.app;
 
 import es.elka.koda.app.algorithm.HuffmanAlgorithm;
 import es.elka.koda.app.coder.Coder;
+import es.elka.koda.app.config.CommandConsole;
 import es.elka.koda.app.file.EncodedFile;
 import es.elka.koda.app.file.EncodedFileImpl;
 import es.elka.koda.app.file.FileToEncode;
@@ -17,18 +18,26 @@ public class Application {
     private HuffmanAlgorithm huffmanAlgorithm = new HuffmanAlgorithm();
 
     public static void main(String[] args) {
+        CommandConsole commandConsole = CommandConsole.createCommand();
+
+        if (commandConsole.parseArgs(args)) {
+            return;
+        }
+
         Application application = new Application();
 
+        String path = commandConsole.inputFileName();
+
         try {
-            application.code("test.pgm");
+            application.code(path);
         } catch (IOException e) {
-            System.err.println("Brak pliku test.pgm");
+            application.serveFileException(e);
         }
 
     }
 
     private void serveFileException(IOException e) {
-        //TODO pewnie dojdzie gdzie obiekt Console czy coś takiego
+        System.err.println("Problem with processing file. Exception message: " + e.getMessage());
     }
 
     public void code(String path) throws IOException {

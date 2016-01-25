@@ -4,6 +4,9 @@ import java.util.BitSet;
 
 public class BitsWrapper {
     private final BitSet bitSet;
+    /**
+     * zapisz jako signed
+     */
     private final byte length;
 
     public BitsWrapper(BitSet bitSet, byte length) {

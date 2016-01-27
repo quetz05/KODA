@@ -38,6 +38,7 @@ public class Application {
 
     private void serveFileException(IOException e) {
         System.err.println("Problem with processing file. Exception message: " + e.getMessage());
+        e.printStackTrace();
     }
 
     public void code(String path) throws IOException {

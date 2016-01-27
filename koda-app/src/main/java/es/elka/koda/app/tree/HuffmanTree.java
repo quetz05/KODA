@@ -88,8 +88,8 @@ public class HuffmanTree {
             // TODO - uproszczenie po dodaniu parenta
 
             // szukanie ścieżki w celu zmiany wskazań węzłów
-            Vector<Node> path = new Vector<Node>();
-            getPath2(root,currentSmallestNode, path);
+            Vector<Node> path = new Vector<>();
+            getPath(root,currentSmallestNode, path);
 
             // stworzenie nowego węzła pośredniego
             Node emptyNode = new Node(currentSmallestNode.weight);
@@ -123,21 +123,11 @@ public class HuffmanTree {
             // dodanie do listy węzłów nowego, pustego węzła
             nodeList.add(emptyNode);
 
-            // TODO - poprawa doOrdering
-            //doOrdering(newNode);
+            doOrdering(newNode);
         }
     }
 
-    /**
-     * Metoda szukająca ścieżki do konkretnego węzła w drzewie, ropoczynając od konkretnego węzła.
-     * Opiera się o przeszukiwanie wgłąb. Złożoność czasowa wynosi O(n).
-     *
-     * @param beginNode węzeł od którego przeszukujemy wgłąb
-     * @param searchedNode szukany węzeł
-     * @param path lista ze ścieżką do węzła (zawierająca kolejne węzły począwszy od szukanego węzła)
-     *
-     * @return true jeśli ścieżka do węzła została znaleziona (węzeł istnieje), false w przeciwnym wypadku
-     */
+
 //    private Boolean getPath(Node beginNode, Node searchedNode, Vector<Node> path)
 //    {
 //        if(beginNode == null)
@@ -153,7 +143,16 @@ public class HuffmanTree {
 //        return false;
 //    }
 
-    private Boolean getPath2(Node beginNode, Node searchedNode, Vector<Node> path)
+    /**
+     * Metoda szukająca ścieżki do konkretnego węzła w drzewie, ropoczynając od konkretnego węzła.
+     *
+     * @param beginNode węzeł od którego przeszukujemy wgłąb
+     * @param searchedNode szukany węzeł
+     * @param path lista ze ścieżką do węzła (zawierająca kolejne węzły począwszy od szukanego węzła)
+     *
+     * @return true jeśli ścieżka do węzła została znaleziona (węzeł istnieje), false w przeciwnym wypadku
+     */
+    private Boolean getPath(Node beginNode, Node searchedNode, Vector<Node> path)
     {
         Node temp = searchedNode;
         while(true)
@@ -161,8 +160,8 @@ public class HuffmanTree {
             path.add(temp);
             if (temp == beginNode)
                 break;
-            temp = temp.parent;
-
+            else
+                temp = temp.parent;
         }
         return true;
     }
@@ -175,18 +174,18 @@ public class HuffmanTree {
      */
     public Vector<Node> getPath(Node searchedNode)
     {
-        Vector<Node> path = new Vector<Node>();
-        getPath2(root, searchedNode, path);
+        Vector<Node> path = new Vector<>();
+        getPath(root, searchedNode, path);
         return path;
     }
 
     /**
      * Metoda przeglądająca drzewo od konkretnego węzła (któremu zwiększa wagę o 1) i porządkująca jego strukturę.
+     *
+     * @param node - węzeł do porządkowania
      */
     public void doOrdering(Node node)
     {
-        // TODO - algorytm porządkowania, duża złożoność przeszukiwania listy, może da się lepiej (teraz jest O(n))
-
         node.weight++;
 
         if(node == root)
@@ -203,7 +202,7 @@ public class HuffmanTree {
             }
 
         if(node.parent == null)
-            System.out.println("O NIE!");
+            System.out.println("O NIE! Jesteśmy zgubieni!");
         doOrdering(node.parent);
     }
 

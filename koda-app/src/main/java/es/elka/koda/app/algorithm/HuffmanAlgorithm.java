@@ -18,7 +18,7 @@ public class HuffmanAlgorithm implements HuffmanAlgorithmServer {
      * Mapa hashująca zawierająca węzły drzewa z symbolami - przyspiesza sprawdzanie czy węzeł o danym symbolu jest w drzewie
      */
     private Map<Byte, Node> nodes;
-    private Map<Byte, BitSet> dictionary;
+    private Map<Byte, BitsWrapper> dictionary;
     private HuffmanTree tree;
 
 
@@ -38,7 +38,7 @@ public class HuffmanAlgorithm implements HuffmanAlgorithmServer {
     {
         nodes = new HashMap<Byte, Node>();
         tree = new HuffmanTree();
-        dictionary = new HashMap<Byte, BitSet>();
+        dictionary = new HashMap<Byte, BitsWrapper>();
     }
 
     /**
@@ -49,7 +49,7 @@ public class HuffmanAlgorithm implements HuffmanAlgorithmServer {
     {
         nodes = new HashMap<Byte, Node>();
         tree = new HuffmanTree();
-        dictionary = new HashMap<Byte, BitSet>();
+        dictionary = new HashMap<Byte, BitsWrapper>();
     }
 
     /**
@@ -124,11 +124,12 @@ public class HuffmanAlgorithm implements HuffmanAlgorithmServer {
      * @param node węzeł drzewa, dla którego ma zostać policzony klucz
      * @return klucz w formie ciągu bitów
      */
-    private BitSet getSymbolKey(Node node)
+    private BitsWrapper getSymbolKey(Node node)
     {
         Vector<Node> path = tree.getPath(node);
         Collections.reverse(path);
         BitSet key = new BitSet(path.size()-1);
+        byte counter = 0;
 
         for(int i = 0; i <path.size() - 1; i++)
         {
@@ -136,8 +137,10 @@ public class HuffmanAlgorithm implements HuffmanAlgorithmServer {
                 key.set(i,false);
             else
                 key.set(i,true);
+
+            counter++;
         }
-        return key;
+        return new BitsWrapper(key,counter);
     }
 
     /**
@@ -146,7 +149,7 @@ public class HuffmanAlgorithm implements HuffmanAlgorithmServer {
      */
     public void createDictionary()
     {
-        dictionary = new HashMap<Byte, BitSet>();
+        dictionary = new HashMap<Byte, BitsWrapper>();
         for(Map.Entry<Byte, Node> entry : nodes.entrySet())
         {
             dictionary.put(entry.getKey(), getSymbolKey(entry.getValue()));
@@ -158,7 +161,7 @@ public class HuffmanAlgorithm implements HuffmanAlgorithmServer {
      *
      * @return słownik w postaci <symbol, ciąg bitów>
      */
-    public Map<Byte, BitSet> getDictionary()
+    public Map<Byte, BitsWrapper> getDictionary()
     {
         return dictionary;
     }

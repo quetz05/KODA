@@ -38,7 +38,7 @@ final class MapToArrayHelper {
 
     byte[] toBuild() {
         return ArrayUtils.toPrimitive(
-                (Byte[]) bitSetToByteArrayBuilder.build(false).toArray()
+                bitSetToByteArrayBuilder.build(false).toArray(new Byte[bitSetToByteArrayBuilder.getBytes().size()])
         );
     }
 

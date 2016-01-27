@@ -12,13 +12,36 @@ import static org.junit.Assert.assertEquals;
  */
 public class BitSetToByteArrayBuilderTest {
 
-    @Test(expected = IllegalArgumentException.class)
-    public void addBits_bitSetIsIgnoredIfBitSetLengthIsMoreThanNumberBitsInByte_IllegalArgumentExceptionThrown() {
+    @Test
+    public void addBits_bitSetIsDividedAndRecurencyProcessWhenIsLongerThan8_IllegalArgumentExceptionThrown() {
         BitSet bitSet = new BitSet();
+        bitSet.set(0);
+        bitSet.set(1);
+        bitSet.set(2);
+        bitSet.set(3);
+        bitSet.set(4);
+        bitSet.set(6);
+        bitSet.set(7);
         bitSet.set(8);
+        bitSet.set(10);
 
         BitSetToByteArrayBuilder bitSetToByteArrayBuilder = new BitSetToByteArrayBuilder();
-        bitSetToByteArrayBuilder.addBits(bitSet, 9);
+        bitSetToByteArrayBuilder.addBits(bitSet, 12);
+
+        BitSet expectedBitSet = new BitSet();
+        expectedBitSet.set(0);
+        expectedBitSet.set(1);
+        expectedBitSet.set(2);
+        expectedBitSet.set(3);
+
+        //1111
+        assertEquals(expectedBitSet, bitSetToByteArrayBuilder.getLastBits());
+
+        //length(1111) = 4
+        assertEquals(4, bitSetToByteArrayBuilder.getLastBitsLength());
+
+        //01011101 (2) = 64 + 16 + 8 + 4 + 1 (10) = 93 (10)
+        assertEquals(new Byte((byte) 93), bitSetToByteArrayBuilder.getBytes().get(0));
     }
 
     @Test(expected = IllegalArgumentException.class)

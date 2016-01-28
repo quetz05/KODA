@@ -32,13 +32,16 @@ public class BitSetToByteArrayBuilder {
     }
 
     /**
-     * Metoda dodaje bity i w razie koniecznosci (jezeli laczna suma bitow dodanych bedzie wieksza od 8)
-     * formuluje dodane bity w bajt i dodaje do listy bajtow. Warto wspomniec ze jako argument poza BitSetem
-     * podawany jest rowniez dlugosc BitSetu. Wynika to z faktu, że metoda {java.util.BitSet#length} zwraca
-     * dlugosc z uwzglednieniem ostatniego wystapienia 1, zatem dla ciagu
+     * Metoda dodaje bity i w razie koniecznosc formuluje dodane bity w bajt i dodaje do listy bajtow.
+     * Warto wspomniec ze jako argument poza BitSetem podawany jest rowniez dlugosc BitSetu.
+     * Wynika to z faktu, że metoda {java.util.BitSet#length} zwraca dlugosc z uwzglednieniem
+     * ostatniego wystapienia 1, zatem dla ciagu
      * 00110101
      * metoda length zwroci 5. stad aby wynik byl poprawny nalezy podac odpowiednia dlugosc, czyli dla
      * przykladu powyzej wywolanie funkcji powinno miec postac addBits(bits,7)
+     *
+     * W przypadku gdy liczba bitow jest wieksza od 8, na poczatku dodawane jest 8 bitow pierwszych, a nastepnie
+     * dodawana reszta (rekurencyjnie)
      *
      * @param bits
      * @param bitsLength dlugosc bitow z uwzglednieniem 0 poczatkowych
@@ -52,7 +55,10 @@ public class BitSetToByteArrayBuilder {
         }
 
         if (bitsLength > BITS_PER_BYTE) {
-            throw new IllegalArgumentException("BitSet can't have length greater than " + BITS_PER_BYTE);
+            BitSet firstEightBits = bits.get(bitsLength - BITS_PER_BYTE, bitsLength);
+            BitSet restBits = bits.get(0, bitsLength - BITS_PER_BYTE);
+            this.addBits(firstEightBits, BITS_PER_BYTE);
+            this.addBits(restBits, BITS_PER_BYTE);
         }
 
         updateBytesAndAddToLastBits(bits, bitsLength);

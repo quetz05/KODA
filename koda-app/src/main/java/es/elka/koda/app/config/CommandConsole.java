@@ -7,6 +7,9 @@ public class CommandConsole {
     private JCommander jCommander;
     private CommandCoder commandCoder;
 
+    private CommandConsole() {
+    }
+
     public static CommandConsole createCommand() {
         CommandConsole console = new CommandConsole();
         console.commandCoder = new CommandCoder();
@@ -26,8 +29,8 @@ public class CommandConsole {
                 jCommander.usage();
                 return true;
             }
-            return false;
         }
+        return false;
     }
 
     public String inputFileName() {

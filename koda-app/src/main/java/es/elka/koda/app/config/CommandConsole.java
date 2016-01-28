@@ -12,6 +12,7 @@ public class CommandConsole {
         console.commandCoder = new CommandCoder();
         console.jCommander = new JCommander();
         console.jCommander.addCommand("code", console.commandCoder);
+        console.jCommander.addCommand("decode", console.commandCoder);
         return console;
     }
 

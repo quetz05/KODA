@@ -1,12 +1,16 @@
 package es.elka.koda.app.file;
 
-import java.util.stream.Stream;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Plik w formacie *.pgm do wczytywania danych bez nagłówka
  */
 public class PgmFileToEncode extends AbstractFileToEncode implements FileToEncode {
     private final int LINES_CONTAINES_HEADER = 4;
+    private final Byte NEXT_LINE_SIGN = 0x0A;
+    private boolean takeAllNext = false;
+    private int currentLinesContainsHeader = 0;
 
     public PgmFileToEncode(String path) {
         super(path);
@@ -21,8 +25,23 @@ public class PgmFileToEncode extends AbstractFileToEncode implements FileToEncod
      * @see AbstractFileToEncode#loadData()
      */
     @Override
-    protected Stream<String> ignoreHeader(Stream<String> dataWithHeader) {
-        return dataWithHeader.skip(LINES_CONTAINES_HEADER);
+    protected List<Byte> ignoreHeader(List<Byte> dataWithHeader) {
+        this.takeAllNext = false;
+        return dataWithHeader.stream()
+                .filter(this::checkSignAndUpdate)
+                .collect(Collectors.toList());
+    }
+
+    private boolean checkSignAndUpdate(Byte b) {
+        if (takeAllNext) return true;
+
+        if (b.equals(NEXT_LINE_SIGN)) {
+            currentLinesContainsHeader++;
+        }
+        if (currentLinesContainsHeader == LINES_CONTAINES_HEADER) {
+            takeAllNext = true;
+        }
+        return false;
     }
 
 }

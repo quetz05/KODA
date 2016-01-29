@@ -1,13 +1,13 @@
 package es.elka.koda.app.file;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Abstrakcyjna klasa pliku wczytywanego do kodowani.
@@ -36,8 +36,9 @@ public abstract class AbstractFileToEncode implements FileToEncode {
      * @return strumien ciągu znaków reprezentujących kolejne linijki tesktu
      * @throws IOException
      */
-    protected Stream<String> loadAllData() throws IOException {
-        return Files.lines(path, StandardCharsets.ISO_8859_1);
+    protected List<Byte> loadAllData() throws IOException {
+        byte[] dataWithHeader = Files.readAllBytes(path);
+        return Arrays.asList(ArrayUtils.toObject(dataWithHeader));
     }
 
     /**
@@ -48,21 +49,11 @@ public abstract class AbstractFileToEncode implements FileToEncode {
      */
     @Override
     public List<Byte> loadData() throws IOException {
-        Stream<String> dataWithHeader = loadAllData();
-        Stream<String> dataWithoutHeader = ignoreHeader(dataWithHeader);
-        return mapToBytes(dataWithoutHeader);
+        List<Byte> dataWithHeader = loadAllData();
+        return ignoreHeader(dataWithHeader);
     }
 
     /**
-     * Mapowanie danych z listy ciągów znaków na listę bajtów
-     * @param dataWithoutHeader
-     * @return
-     */
-    private List<Byte> mapToBytes(Stream<String> dataWithoutHeader) {
-        return dataWithoutHeader
-                .flatMap(s -> s.chars().mapToObj(i -> (byte) i))
-                .collect(Collectors.toList());
-    }
 
     /**
      * Abstrakcyjna metoda, która powinna być implementowana w każdej podklasie (ignorowanie nagłówka jest zależne
@@ -70,7 +61,7 @@ public abstract class AbstractFileToEncode implements FileToEncode {
      * @param dataWithHeader dane z nagłówkiem
      * @return dane bez nagłówka
      */
-    protected abstract Stream<String> ignoreHeader(Stream<String> dataWithHeader);
+    protected abstract List<Byte> ignoreHeader(List<Byte> dataWithHeader);
 
 
 }

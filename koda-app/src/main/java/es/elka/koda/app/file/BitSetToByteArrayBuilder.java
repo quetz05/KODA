@@ -59,6 +59,7 @@ public class BitSetToByteArrayBuilder {
             BitSet restBits = bits.get(0, bitsLength - BITS_PER_BYTE);
             this.addBits(firstEightBits, BITS_PER_BYTE);
             this.addBits(restBits, bitsLength - BITS_PER_BYTE);
+            return this;
         }
 
         updateBytesAndAddToLastBits(bits, bitsLength);

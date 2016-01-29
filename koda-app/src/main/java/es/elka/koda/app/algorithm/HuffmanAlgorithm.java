@@ -75,14 +75,15 @@ public class HuffmanAlgorithm implements HuffmanAlgorithmServer {
         {
             // stworzenie nowego węzła
             Node newNode = new Node(symbol);
-            // umieszczenie węzła w drzewie
-            tree.addNode(newNode);
             // umieszczenie węzła w mapie (na miejscu węzła o najmniejszej wadze)
             nodes.put(symbol, newNode);
+            // umieszczenie węzła w drzewie
+            if(tree.addNode(newNode))
+                tree.doOrdering(newNode);
         }
 
-        //printTree();
-        //System.out.println("________________________________________________");
+//        printTree();
+//        System.out.println("________________________________________________");
 
     }
 

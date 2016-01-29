@@ -1,9 +1,11 @@
 package es.elka.koda.generator;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.stat.StatUtils;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 
 
 /***
@@ -27,25 +29,26 @@ public class SaveToPGMFile {
         this.width = width;
         this.height = height;
 
+        byte[] bytes = new byte[values.length];
+        for (int i = 0; i < values.length; ++i) {
+            bytes[i] = (byte) ((int) (values[i]));
+        }
         try {
-            FileWriter fstream = new FileWriter("output.pgm");
-            BufferedWriter out = new BufferedWriter(fstream);
-
-            // Naglowek
-            out.write(this.writeHeader());
-
+            FileOutputStream fos = new FileOutputStream("output.pgm");
+            fos.write(this.writeHeader());
             int x = 0;
-            for (int i = 0; i < width; i++)
+            for (int i = 0; i < width; i++) {
                 for (int j = 0; j < height; j++) {
-                    out.write((int) values[x] + "  ");
+                    fos.write(bytes[x]);
                     x++;
                 }
-            out.write('\n');
-
-            out.close();
+                fos.write("\n".getBytes());
+            }
+            fos.close();
         } catch (Exception e) {
             System.err.println("\tSaving error : " + e.getMessage());
         }
+
     }
 
     /***
@@ -54,18 +57,25 @@ public class SaveToPGMFile {
      * @return String z nagłówkiem
      * @throws Exception W przypadku gdy nie ma wartosci do zapisania (brak najwiekszego elementu tablicy)
      */
-    private String writeHeader() throws Exception {
-        StringBuilder sb = new StringBuilder();
-        sb.append("P2\n");
-        sb.append("# KODA Generator Elka.Es.Chu.Wdu\n");
-        sb.append(width);
-        sb.append(" ");
-        sb.append(height);
-        sb.append("\n");
-        sb.append((int) findMaxNumber());
-        sb.append("\n");
+    private byte[] writeHeader() throws Exception {
+        ArrayList<Byte> arrayList = new ArrayList<>();
 
-        return sb.toString();
+        Collections.addAll(arrayList, ArrayUtils.toObject("P2\n".getBytes()));
+        Collections.addAll(arrayList, ArrayUtils.toObject("# KODA Generator Elka.Es.Chu.Wdu\n".getBytes()));
+        arrayList.add(width.byteValue());
+        Collections.addAll(arrayList, ArrayUtils.toObject(" ".getBytes()));
+        arrayList.add(height.byteValue());
+        Collections.addAll(arrayList, ArrayUtils.toObject("\n".getBytes()));
+        arrayList.add(new Byte((byte) findMaxNumber()));
+        Collections.addAll(arrayList, ArrayUtils.toObject("\n".getBytes()));
+        byte[] bytes = new byte[arrayList.size()];
+
+        for (int i = 0; i < arrayList.size(); ++i) {
+            bytes[i] = arrayList.get(i);
+        }
+
+
+        return bytes;
     }
 
     /***

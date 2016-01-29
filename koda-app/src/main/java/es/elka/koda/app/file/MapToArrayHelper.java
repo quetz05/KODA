@@ -26,7 +26,7 @@ final class MapToArrayHelper {
     MapToArrayHelper addDictionary(int size) {
         dictionary.keySet().stream().forEach(
                 b -> bitSetToByteArrayBuilder.addByte(b)
-                        .addByte(dictionary.get(b).getLength())
+                        .addByte((byte) dictionary.get(b).getLength())
                         .addBits(dictionary.get(b).getBitSet(), dictionary.get(b).getLength())
         );
 

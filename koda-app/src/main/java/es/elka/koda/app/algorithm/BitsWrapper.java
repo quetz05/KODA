@@ -7,9 +7,9 @@ public class BitsWrapper {
     /**
      * zapisz jako signed
      */
-    private final byte length;
+    private final int length;
 
-    public BitsWrapper(BitSet bitSet, byte length) {
+    public BitsWrapper(BitSet bitSet, int length) {
         this.bitSet = bitSet;
         this.length = length;
     }
@@ -18,7 +18,7 @@ public class BitsWrapper {
         return bitSet;
     }
 
-    public byte getLength() {
+    public int getLength() {
         return length;
     }
 }

@@ -1,6 +1,7 @@
 package es.elka.koda.app.file;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,7 +37,7 @@ public abstract class AbstractFileToEncode implements FileToEncode {
      * @throws IOException
      */
     protected Stream<String> loadAllData() throws IOException {
-        return Files.lines(path);
+        return Files.lines(path, StandardCharsets.ISO_8859_1);
     }
 
     /**

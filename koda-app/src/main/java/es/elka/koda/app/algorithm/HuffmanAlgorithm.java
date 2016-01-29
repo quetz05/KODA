@@ -3,6 +3,7 @@ package es.elka.koda.app.algorithm;
 import es.elka.koda.app.coder.HuffmanAlgorithmServer;
 import es.elka.koda.app.tree.HuffmanTree;
 import es.elka.koda.app.tree.Node;
+
 import java.util.*;
 
 /**
@@ -23,15 +24,6 @@ public class HuffmanAlgorithm implements HuffmanAlgorithmServer {
 
 
     /**
-     * Metoda inicjalizująca początkową postać drzewa.
-     */
-    public void initialize()
-    {
-        //TODO - zaimplementować inicjalizowanie drzewa - deterministyczne
-
-    }
-
-    /**
      * Konstruktor algorytmu Huffmana
      */
     public HuffmanAlgorithm()
@@ -39,6 +31,15 @@ public class HuffmanAlgorithm implements HuffmanAlgorithmServer {
         nodes = new HashMap<Byte, Node>();
         tree = new HuffmanTree();
         dictionary = new HashMap<Byte, BitsWrapper>();
+    }
+
+    /**
+     * Metoda inicjalizująca początkową postać drzewa.
+     */
+    public void initialize()
+    {
+        //TODO - zaimplementować inicjalizowanie drzewa - deterministyczne
+
     }
 
     /**
@@ -129,7 +130,7 @@ public class HuffmanAlgorithm implements HuffmanAlgorithmServer {
         Vector<Node> path = tree.getPath(node);
         Collections.reverse(path);
         BitSet key = new BitSet(path.size()-1);
-        byte counter = 0;
+        int counter = 0;
 
         for(int i = 0; i <path.size() - 1; i++)
         {

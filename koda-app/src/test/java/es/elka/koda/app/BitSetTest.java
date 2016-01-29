@@ -57,4 +57,12 @@ public class BitSetTest {
 
         System.out.println(bitSet.size());
     }
+
+    @Test
+    public void test4() {
+        int value = 200;
+        byte b = (byte) value;  //-56
+
+        System.out.print(b);
+    }
 }

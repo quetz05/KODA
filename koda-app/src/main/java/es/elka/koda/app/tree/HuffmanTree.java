@@ -89,7 +89,7 @@ public class HuffmanTree {
 
             // szukanie ścieżki w celu zmiany wskazań węzłów
             Vector<Node> path = new Vector<>();
-            getPath(root,currentSmallestNode, path);
+            getPath(/*root,*/currentSmallestNode, path);
 
             // stworzenie nowego węzła pośredniego
             Node emptyNode = new Node(currentSmallestNode.weight);
@@ -123,6 +123,8 @@ public class HuffmanTree {
             // dodanie do listy węzłów nowego, pustego węzła
             nodeList.add(emptyNode);
 
+
+            //newNode.weight++;
             doOrdering(newNode);
         }
     }
@@ -152,13 +154,13 @@ public class HuffmanTree {
      *
      * @return true jeśli ścieżka do węzła została znaleziona (węzeł istnieje), false w przeciwnym wypadku
      */
-    private Boolean getPath(Node beginNode, Node searchedNode, Vector<Node> path)
+    private Boolean getPath(/*Node beginNode, */Node beginNode, Vector<Node> path)
     {
-        Node temp = searchedNode;
+        Node temp = beginNode;
         while(true)
         {
             path.add(temp);
-            if (temp == beginNode)
+            if (temp == root)
                 break;
             else
                 temp = temp.parent;
@@ -175,8 +177,16 @@ public class HuffmanTree {
     public Vector<Node> getPath(Node searchedNode)
     {
         Vector<Node> path = new Vector<>();
-        getPath(root, searchedNode, path);
+        getPath(/*root, */searchedNode, path);
         return path;
+    }
+
+    private boolean isLeftChild(Node n)
+    {
+        if(n.parent.leftChild == n)
+            return true;
+        else
+            return false;
     }
 
     /**
@@ -188,22 +198,33 @@ public class HuffmanTree {
     {
         node.weight++;
 
+        print();
+        System.out.println("________________________________________________");
+
+
         if(node == root)
             return;
+        Node nodeParent = node.parent;
 
-        for(Node n : nodeList)
-            if(n.isLeaf() && node.isLeaf() && node.weight -1 == n.weight)
-            {
-                if(currentSmallestNode == node)
-                    currentSmallestNode = n;
+        if(node.symbol != null)
+        {
+            for(Node n : nodeList)
+                if(n.isLeaf() && node.isLeaf() && node.weight -1 == n.weight)
+                {
+                    System.out.println(node.index  + "/" + n.index);
+                    if(currentSmallestNode == node)
+                        currentSmallestNode = n;
 
-                swapNodes(node, n);
-                break;
-            }
+                    swapNodes(node, n);
+                    break;
+                }
+        }
 
+        print();
+        System.out.println("________________________________________________");
         if(node.parent == null)
             System.out.println("O NIE! Jesteśmy zgubieni!");
-        doOrdering(node.parent);
+        doOrdering(nodeParent);
     }
 
     /**
@@ -214,6 +235,16 @@ public class HuffmanTree {
      */
     private void swapNodes(Node first, Node second)
     {
+        if(isLeftChild(first))
+            first.parent.leftChild = second;
+        else
+            first.parent.rightChild = second;
+
+        if(isLeftChild(second))
+            second.parent.leftChild = first;
+        else
+            second.parent.rightChild = first;
+
         Node tempParent = first.parent;
         Node tempLeft = first.leftChild;
         Node tempRight = first.rightChild;

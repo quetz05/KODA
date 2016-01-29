@@ -7,7 +7,7 @@ import java.util.Map;
 public interface HuffmanAlgorithmServer {
     void initialize();
 
-    void addAndModify(byte token);
+    void addAndModify(Byte token);
 
     void createDictionary();
 

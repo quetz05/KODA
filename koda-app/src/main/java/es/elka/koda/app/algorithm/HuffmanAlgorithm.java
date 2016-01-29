@@ -61,7 +61,7 @@ public class HuffmanAlgorithm implements HuffmanAlgorithmServer {
      *
      * @param symbol kolejny symbol występujący w strumieniu danych
      */
-    public void addAndModify(byte symbol)
+    public void addAndModify(Byte symbol)
     {
         Node node = nodes.get(symbol);
         // jeśli symbol jest już w drzewie
@@ -80,6 +80,9 @@ public class HuffmanAlgorithm implements HuffmanAlgorithmServer {
             // umieszczenie węzła w mapie (na miejscu węzła o najmniejszej wadze)
             nodes.put(symbol, newNode);
         }
+
+        //printTree();
+        //System.out.println("________________________________________________");
 
     }
 
@@ -136,7 +139,7 @@ public class HuffmanAlgorithm implements HuffmanAlgorithmServer {
         {
             if(path.get(i).leftChild == path.get(i+1))
                 key.set(i,false);
-            else
+            else// if(path.get(i).rightChild == path.get(i+1))
                 key.set(i,true);
 
             counter++;

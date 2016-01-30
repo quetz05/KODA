@@ -3,11 +3,14 @@ package es.elka.koda.app;
 import es.elka.koda.app.algorithm.HuffmanAlgorithm;
 import es.elka.koda.app.coder.Coder;
 import es.elka.koda.app.config.CommandConsole;
+import es.elka.koda.app.decoder.Decoder;
 import es.elka.koda.app.file.EncodedFile;
 import es.elka.koda.app.file.EncodedFileImpl;
 import es.elka.koda.app.file.FileToEncode;
 import es.elka.koda.app.file.PgmFileToEncode;
+import org.apache.commons.io.IOUtils;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.BitSet;
 import java.util.List;
@@ -29,7 +32,8 @@ public class Application {
         String path = commandConsole.inputFileName();
 
         try {
-            application.code(path);
+            application.decode(path);
+            // application.code(path);
         } catch (IOException e) {
             application.serveFileException(e);
         }
@@ -51,4 +55,13 @@ public class Application {
         encodedFileToSave.save(encodedData, huffmanAlgorithm.getDictionary());
 
     }
+
+    public void decode(String path) throws IOException {
+
+        byte[] bytes = IOUtils.toByteArray(new FileInputStream(path));
+
+        Decoder decoder = new Decoder(bytes);
+        decoder.decode();
+    }
+
 }

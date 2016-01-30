@@ -16,6 +16,7 @@ public class Application {
     //Console console; coś takiego pewnie tutaj będzie
 
     private HuffmanAlgorithm huffmanAlgorithm = new HuffmanAlgorithm();
+    private int encodedDataSize;
 
     public static void main(String[] args) {
         CommandConsole commandConsole = CommandConsole.createCommand();
@@ -30,6 +31,12 @@ public class Application {
 
         try {
             application.code(path);
+            if (commandConsole.debug()) {
+                System.out.println("Średnia długość zakodowanego znaku: " +
+                        application.calculateAverageSignCoded(application.encodedDataSize));
+                System.out.println("Stopień entropii: " +
+                        application.calculateEntropy(application.encodedDataSize));
+            }
         } catch (IOException e) {
             application.serveFileException(e);
         }
@@ -49,6 +56,23 @@ public class Application {
         String fileName = fileToEncode.getPath().getFileName().toString();
         EncodedFile encodedFileToSave = new EncodedFileImpl(fileName);
         encodedFileToSave.save(encodedData, huffmanAlgorithm.getDictionary());
+        encodedDataSize = encodedData.size();
+    }
 
+    private double calculateAverageSignCoded(int size) {
+        long sum = huffmanAlgorithm.getTree().nodeList.stream()
+                .filter(e -> e.symbol != null)
+                .mapToLong(e -> huffmanAlgorithm.getDictionary().get(e.symbol).getLength() * e.weight)
+                .sum();
+
+        return (double) sum / size;
+    }
+
+    private double calculateEntropy(int size) {
+        return (-1) * huffmanAlgorithm.getTree().nodeList.stream()
+                .filter(e -> e.symbol != null)
+                .mapToDouble(e -> (double) e.weight / size)
+                .map(p -> p * Math.log(p) / Math.log(2))
+                .sum();
     }
 }

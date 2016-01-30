@@ -37,4 +37,8 @@ public class CommandConsole {
         return commandCoder.getInputFileName();
     }
 
+    public boolean debug() {
+        return commandCoder.isDebug();
+    }
+
 }

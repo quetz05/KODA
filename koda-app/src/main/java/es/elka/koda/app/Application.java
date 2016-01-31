@@ -8,8 +8,10 @@ import es.elka.koda.app.file.EncodedFile;
 import es.elka.koda.app.file.EncodedFileImpl;
 import es.elka.koda.app.file.FileToEncode;
 import es.elka.koda.app.file.PgmFileToEncode;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.BitSet;
@@ -32,8 +34,17 @@ public class Application {
         String path = commandConsole.inputFileName();
 
         try {
-            application.decode(path);
-            // application.code(path);
+            switch(commandConsole.getjCommander().getParsedCommand()){
+                case "code":
+                    application.code(path);
+                    break;
+                case "decode":
+                    application.decode(path);
+                    break;
+                default:
+                    commandConsole.getjCommander().usage();
+            }
+
         } catch (IOException e) {
             application.serveFileException(e);
         }
@@ -61,7 +72,9 @@ public class Application {
         byte[] bytes = IOUtils.toByteArray(new FileInputStream(path));
 
         Decoder decoder = new Decoder(bytes);
-        decoder.decode();
+        byte[] decodedBytes = decoder.decode();
+
+        FileUtils.writeByteArrayToFile(new File(path +".decoded"), decodedBytes);
     }
 
 }

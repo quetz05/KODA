@@ -37,4 +37,7 @@ public class CommandConsole {
         return commandCoder.getInputFileName();
     }
 
+    public JCommander getjCommander(){
+        return this.jCommander;
+    }
 }

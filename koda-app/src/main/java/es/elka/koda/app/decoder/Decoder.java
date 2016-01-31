@@ -4,17 +4,18 @@ import java.util.*;
 
 public class Decoder {
     private final byte[] bytes;
-    private final Map<MojMap, Byte> dictionary;
+    private final Map<CodeWrapper, Byte> dictionary;
     private int currentIndex = 0;
     private int nextKeyLength;
     private Boolean[] bools;
+    private int totalValuesToDecode;
 
     public Decoder(byte[] bytes) {
         this.bytes = bytes;
         dictionary = new HashMap<>();
     }
 
-    public void decode() {
+    public byte[] decode() {
 
         BitSet bits = BitSet.valueOf(bytes);
         int size = bytes.length * 8;
@@ -43,38 +44,50 @@ public class Decoder {
             Byte value = readValue();
             this.nextKeyLength = readKeyLength();
             Boolean[] nextKey = readNextKey();
-            dictionary.put(new MojMap(nextKey), value);
+            dictionary.put(new CodeWrapper(nextKey), value);
         }
-        this.readKeyNumber();
-        this.decodeMeDatShit();
+        this.totalValuesToDecode = this.readKeyNumber();
 
-        System.out.println("Bajlando");
+        return this.decodeMeDatShit();
     }
 
-    private void readKeyNumber() {
-        currentIndex = currentIndex + 32;
-        //po co mię ta liczba elementow??
+    private int readKeyNumber() {
+        int endIndex = currentIndex + 32;
+        Boolean[] bitValues = Arrays.copyOfRange(this.bools, currentIndex, endIndex);
+
+        BitSet bitsetBits = new BitSet(32);
+
+        for (int i = 0; i < bitValues.length; ++i) {
+            if (bitValues[i]) bitsetBits.set(31 - i);
+        }
+
+
+        currentIndex = endIndex;
+
+        return (int) bitsetBits.toLongArray()[0];
     }
 
     private byte[] decodeMeDatShit() {
         ArrayList<Byte> decodedBytes = new ArrayList<>();
         ArrayList<Boolean> values = new ArrayList<>();
-
+        int leftToDecode = this.totalValuesToDecode;
         for (int i = this.currentIndex; i < this.bools.length; ++i) {
+            if(leftToDecode == 0)
+                break;
+
             values.add(this.bools[i]);
             Boolean[] op = values.toArray(new Boolean[values.size()]);
-            MojMap mm = new MojMap(op);
+            CodeWrapper mm = new CodeWrapper(op);
 
-
-//            Byte decodedByte = dictionary.get(mm);
-//            if (decodedByte != null) {
-//
-//                decodedBytes.add(decodedByte);
-//                values.clear();
-//            }
+            Byte decodedByte = dictionary.get(mm);
+            if (decodedByte != null) {
+                leftToDecode--;
+                decodedBytes.add(decodedByte);
+                values.clear();
+            }
         }
 
-        return new byte[0];
+        return this.convertByteObjectArray(decodedBytes);
     }
 
     private byte readValue() {
@@ -88,31 +101,28 @@ public class Decoder {
             if (bitValues[i]) bitsetBits.set(7 - i);
         }
 
-        byte[] aaaa = bitsetBits.toByteArray();
+        byte[] bytesValue = bitsetBits.toByteArray();
 
         currentIndex = endIndex;
 
         if (bitsetBits.length() == 0)
             return 0;
         else
-
-            return aaaa[0];
+            return bytesValue[0];
     }
 
     private int readKeyLength() {
         byte length = this.readValue();
-
-        int iLen = length;
-        return iLen;
+        return (int) length;
     }
 
     private Boolean[] readNextKey() {
         int endIndex = currentIndex + nextKeyLength;
-        Boolean[] bbb = Arrays.copyOfRange(this.bools, currentIndex, endIndex);
+        Boolean[] byteValues = Arrays.copyOfRange(this.bools, currentIndex, endIndex);
 
         currentIndex = endIndex;
 
-        return bbb;
+        return byteValues;
     }
 
     private boolean isItEnd() {
@@ -131,6 +141,16 @@ public class Decoder {
         for (int j = 8; j > 0; --j) {
             this.bools[startAt - j] = bitsToProcess[j - 1];
         }
+    }
+
+    public byte[] convertByteObjectArray(List<Byte> bytes)
+    {
+        byte[] ret = new byte[bytes.size()];
+        for (int i=0; i < ret.length; i++)
+        {
+            ret[i] = bytes.get(i);
+        }
+        return ret;
     }
 
 }

@@ -2,11 +2,11 @@ package es.elka.koda.app.decoder;
 
 import java.util.Arrays;
 
-public class MojMap {
+public class CodeWrapper {
 
-    Boolean[] bb;
+    public Boolean[] bb;
 
-    public MojMap(Boolean[] bb) {
+    public CodeWrapper(Boolean[] bb) {
         this.bb = bb;
 
 //        if(swap) {
@@ -21,7 +21,7 @@ public class MojMap {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MojMap mojMap = (MojMap) o;
+        CodeWrapper mojMap = (CodeWrapper) o;
 
         // Probably incorrect - comparing Object[] arrays with Arrays.equals
         return Arrays.equals(bb, mojMap.bb);

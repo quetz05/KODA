@@ -1,26 +1,11 @@
 package es.elka.koda.app.file;
 
-import org.junit.Ignore;
-import org.junit.Test;
-
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.List;
 
 public class EncodedFileTest {
-    /*
-        Moje wlasne testy funkcji
-        Zakladaja ze w okreslonej lokalizacji da się dodać plik
-        stad domyslnie ignorowane
-     */
-    @Test
-    @Ignore
-    public void shouldWriteTestFileWithoutDictionary() throws IOException {
-        String fileName = "test";
-        EncodedFile file = new EncodedFileImpl(fileName);
-        List<BitSet> sampleData = prepareData();
-        System.out.println(sampleData);
-        file.save(sampleData, new HashMap<>());
-    }
 
     private List<BitSet> prepareData() {
         List<Integer> integers = Arrays.asList(

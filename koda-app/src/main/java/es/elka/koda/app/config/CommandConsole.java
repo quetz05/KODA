@@ -40,4 +40,8 @@ public class CommandConsole {
     public JCommander getjCommander(){
         return this.jCommander;
     }
+    public boolean debug() {
+        return commandCoder.isDebug();
+    }
+
 }

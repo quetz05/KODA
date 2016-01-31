@@ -1,6 +1,9 @@
 package es.elka.koda.app.util;
 
+import es.elka.koda.app.algorithm.BitsWrapper;
+
 import java.util.BitSet;
+import java.util.Map;
 import java.util.stream.IntStream;
 
 /**
@@ -43,5 +46,24 @@ public class BitSetUtil {
         byte[] dataArray = new byte[1];
         dataArray[0] = data;
         return BitSet.valueOf(dataArray);
+    }
+
+    public static void reverse(Map<Byte, BitsWrapper> dictionary) {
+        dictionary.values().stream()
+                .forEach(BitSetUtil::reverse);
+    }
+
+    public static void reverse(BitsWrapper bits) {
+        int[] reversedIndexes = bits.getBitSet().stream()
+                .map(i -> bits.getLength() - i - 1)
+                .toArray();
+
+        BitSet reversedBitSet = new BitSet();
+        for (int i : reversedIndexes) {
+            reversedBitSet.set(i);
+        }
+
+        bits.setBitSet(reversedBitSet);
+
     }
 }

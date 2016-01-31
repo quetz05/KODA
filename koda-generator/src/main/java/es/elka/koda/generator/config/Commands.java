@@ -15,6 +15,9 @@ public class Commands {
     @Parameter(names = "-verbose", description = "Verbosity mode", hidden = true)
     private boolean verbose = false;
 
+    @Parameter(names = "-length", description = "Length of sequence")
+    private int length = 128;
+
     public List<String> getParameters() {
         return parameters;
     }
@@ -29,5 +32,13 @@ public class Commands {
 
     public void setVerbose(boolean verbose) {
         this.verbose = verbose;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
     }
 }

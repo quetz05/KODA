@@ -10,9 +10,16 @@ public class CommandCoder {
             description = "Input file", required = true)
     private String inputFileName;
 
+    @Parameter(names = {"--debug", "-d"},
+            description = "Debug flag")
+    private boolean debug = false;
 
     public String getInputFileName() {
         return inputFileName;
+    }
+
+    public boolean isDebug() {
+        return debug;
     }
 
 }

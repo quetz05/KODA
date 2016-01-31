@@ -17,9 +17,6 @@ target/
 # Gradle
 .gradle
 koda-*/build
-**/gradlew.bat
-**/gradlew
-**/gradle-wrapper.properties
 
 # Ubuntu przy modyfikacji
 *~

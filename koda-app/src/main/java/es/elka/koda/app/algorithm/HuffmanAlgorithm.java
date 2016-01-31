@@ -27,10 +27,15 @@ public class HuffmanAlgorithm implements HuffmanAlgorithmServer {
      * Konstruktor algorytmu Huffmana
      */
     public HuffmanAlgorithm()
+
     {
         nodes = new HashMap<Byte, Node>();
         tree = new HuffmanTree();
         dictionary = new HashMap<Byte, BitsWrapper>();
+    }
+
+    public HuffmanTree getTree() {
+        return tree;
     }
 
     /**

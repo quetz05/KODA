@@ -1,5 +1,6 @@
 package es.elka.koda.app;
 
+import es.elka.koda.app.algorithm.BitsWrapper;
 import es.elka.koda.app.algorithm.HuffmanAlgorithm;
 import es.elka.koda.app.coder.Coder;
 import es.elka.koda.app.config.CommandConsole;
@@ -14,13 +15,13 @@ import org.apache.commons.io.IOUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.BitSet;
 import java.util.List;
 
 public class Application {
     //Console console; coś takiego pewnie tutaj będzie
 
     private HuffmanAlgorithm huffmanAlgorithm = new HuffmanAlgorithm();
+    private int encodedDataSize;
 
     public static void main(String[] args) {
         CommandConsole commandConsole = CommandConsole.createCommand();
@@ -34,9 +35,16 @@ public class Application {
         String path = commandConsole.inputFileName();
 
         try {
+
             switch(commandConsole.getjCommander().getParsedCommand()){
                 case "code":
                     application.code(path);
+                    if (commandConsole.debug()) {
+                        System.out.println("Średnia długość zakodowanego znaku: " +
+                                application.calculateAverageSignCoded(application.encodedDataSize));
+                        System.out.println("Stopień entropii: " +
+                                application.calculateEntropy(application.encodedDataSize));
+                    }
                     break;
                 case "decode":
                     application.decode(path);
@@ -60,11 +68,28 @@ public class Application {
         FileToEncode fileToEncode = new PgmFileToEncode(path);
         List<Byte> dataToEncode = fileToEncode.loadData();
         Coder coder = new Coder(huffmanAlgorithm);
-        List<BitSet> encodedData = coder.encode(dataToEncode);
+        List<BitsWrapper> encodedData = coder.encode(dataToEncode);
         String fileName = fileToEncode.getPath().getFileName().toString();
         EncodedFile encodedFileToSave = new EncodedFileImpl(fileName);
         encodedFileToSave.save(encodedData, huffmanAlgorithm.getDictionary());
+        encodedDataSize = encodedData.size();
+    }
 
+    private double calculateAverageSignCoded(int size) {
+        long sum = huffmanAlgorithm.getTree().nodeList.stream()
+                .filter(e -> e.symbol != null)
+                .mapToLong(e -> huffmanAlgorithm.getDictionary().get(e.symbol).getLength() * e.weight)
+                .sum();
+
+        return (double) sum / size;
+    }
+
+    private double calculateEntropy(int size) {
+        return (-1) * huffmanAlgorithm.getTree().nodeList.stream()
+                .filter(e -> e.symbol != null)
+                .mapToDouble(e -> (double) e.weight / size)
+                .map(p -> p * Math.log(p) / Math.log(2))
+                .sum();
     }
 
     public void decode(String path) throws IOException {

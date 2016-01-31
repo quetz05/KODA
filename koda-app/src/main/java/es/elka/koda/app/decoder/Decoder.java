@@ -1,17 +1,13 @@
 package es.elka.koda.app.decoder;
 
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Decoder {
     private final byte[] bytes;
-    private final Map<BitSet, Byte> dictionary;
-    private BitSet bits;
+    private final Map<MojMap, Byte> dictionary;
     private int currentIndex = 0;
     private int nextKeyLength;
-    private boolean[] bools;
+    private Boolean[] bools;
 
     public Decoder(byte[] bytes) {
         this.bytes = bytes;
@@ -20,45 +16,87 @@ public class Decoder {
 
     public void decode() {
 
-        boolean isItEnd = false;
-        byte b = 0;
-        // byte[] bytesssss = {b, -127, -8, 32};
-        bits = BitSet.valueOf(bytes);
+        BitSet bits = BitSet.valueOf(bytes);
         int size = bytes.length * 8;
-        bools = new boolean[size];
-        bits.stream().forEach(x -> bools[x] = true);
+        this.bools = new Boolean[size];
+        Arrays.fill(this.bools, Boolean.FALSE);
 
+
+        boolean[] bitsToProcess = new boolean[8];
+        bits.stream().forEach(x -> this.bools[x] = true);
+        Boolean first = true;
+        for (int i = 0; i < this.bools.length; ++i) {
+            int idx = i % 8;
+
+            if (idx == 0 && !first) {
+                this.swapBits(bitsToProcess, i);
+            }
+
+            bitsToProcess[idx] = this.bools[i];
+
+            if (first)
+                first = false;
+        }
+        this.swapBits(bitsToProcess, this.bools.length);
         while (!this.isItEnd()) {
 
             Byte value = readValue();
             this.nextKeyLength = readKeyLength();
-            BitSet nextKey = readNextKey();
-            dictionary.put(nextKey, value);
+            Boolean[] nextKey = readNextKey();
+            dictionary.put(new MojMap(nextKey), value);
         }
+        this.readKeyNumber();
+        this.decodeMeDatShit();
+
+        System.out.println("Bajlando");
+    }
+
+    private void readKeyNumber() {
+        currentIndex = currentIndex + 32;
+        //po co mię ta liczba elementow??
+    }
+
+    private byte[] decodeMeDatShit() {
+        ArrayList<Byte> decodedBytes = new ArrayList<>();
+        ArrayList<Boolean> values = new ArrayList<>();
+
+        for (int i = this.currentIndex; i < this.bools.length; ++i) {
+            values.add(this.bools[i]);
+            Boolean[] op = values.toArray(new Boolean[values.size()]);
+            MojMap mm = new MojMap(op);
+
+
+//            Byte decodedByte = dictionary.get(mm);
+//            if (decodedByte != null) {
+//
+//                decodedBytes.add(decodedByte);
+//                values.clear();
+//            }
+        }
+
+        return new byte[0];
     }
 
     private byte readValue() {
         int endIndex = currentIndex + 8;
-        BitSet val = this.bits.get(currentIndex, endIndex);
-        boolean[] bbb = Arrays.copyOfRange(this.bools, currentIndex, endIndex);
 
-        BitSet leTeste = new BitSet(8);
+        Boolean[] bitValues = Arrays.copyOfRange(this.bools, currentIndex, endIndex);
 
-        for (int i = 0; i < bbb.length; ++i) {
-            if (bbb[i]) leTeste.set(i);
+        BitSet bitsetBits = new BitSet(8);
+
+        for (int i = 0; i < bitValues.length; ++i) {
+            if (bitValues[i]) bitsetBits.set(7 - i);
         }
 
-        byte[] aaaa = leTeste.toByteArray();
-
-        byte[] b = val.toByteArray();
+        byte[] aaaa = bitsetBits.toByteArray();
 
         currentIndex = endIndex;
 
-        if (val.length() == 0)
+        if (bitsetBits.length() == 0)
             return 0;
         else
 
-            return b[0];
+            return aaaa[0];
     }
 
     private int readKeyLength() {
@@ -68,27 +106,31 @@ public class Decoder {
         return iLen;
     }
 
-    private BitSet readNextKey() {
-        int endIndex = currentIndex + this.nextKeyLength;
-        boolean[] bbb = Arrays.copyOfRange(this.bools, currentIndex, endIndex);
-        BitSet val = this.bits.get(currentIndex, endIndex);
-        int czoTo = nextKeyLength - val.length();
+    private Boolean[] readNextKey() {
+        int endIndex = currentIndex + nextKeyLength;
+        Boolean[] bbb = Arrays.copyOfRange(this.bools, currentIndex, endIndex);
+
         currentIndex = endIndex;
-        BitSet leTeste = new BitSet(nextKeyLength);
 
-        for (int i = 0; i < bbb.length; ++i) {
-            if (bbb[i]) leTeste.set(i);
-        }
-
-        byte[] aaaa = leTeste.toByteArray();
-        return val;
+        return bbb;
     }
 
     private boolean isItEnd() {
 
-        BitSet val = this.bits.get(currentIndex, currentIndex + 16);
-        byte[] bytes = val.toByteArray();
-
-        return (bytes[0] == 0 && (bytes[1] == 0));
+        Boolean[] bits = Arrays.copyOfRange(this.bools, currentIndex, currentIndex + 16);
+        for (boolean b : bits) {
+            if (b) {
+                return false;
+            }
+        }
+        currentIndex += 16;
+        return true;
     }
+
+    private void swapBits(boolean[] bitsToProcess, int startAt) {
+        for (int j = 8; j > 0; --j) {
+            this.bools[startAt - j] = bitsToProcess[j - 1];
+        }
+    }
+
 }

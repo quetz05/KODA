@@ -42,7 +42,7 @@ public class SaveToPGMFile {
                     fos.write(bytes[x]);
                     x++;
                 }
-                fos.write("\n".getBytes());
+
             }
             fos.close();
         } catch (Exception e) {

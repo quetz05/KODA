@@ -4,7 +4,6 @@ import es.elka.koda.app.algorithm.BitsWrapper;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.nio.ByteBuffer;
-import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
 
@@ -18,8 +17,8 @@ final class MapToArrayHelper {
         this.dictionary = dictionary;
     }
 
-    MapToArrayHelper addEncodedData(List<BitSet> dataToMap) {
-        dataToMap.stream().forEach(bitSetToByteArrayBuilder::addBits);
+    MapToArrayHelper addEncodedData(List<BitsWrapper> dataToMap) {
+        dataToMap.stream().forEach(b -> bitSetToByteArrayBuilder.addBits(b.getBitSet(), b.getLength()));
         return this;
     }
 

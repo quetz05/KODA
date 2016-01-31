@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +38,7 @@ public class EncodedFileImpl implements EncodedFile {
     }
 
     @Override
-    public void save(List<BitSet> tokens, Map<Byte, BitsWrapper> dictionary) throws IOException {
+    public void save(List<BitsWrapper> tokens, Map<Byte, BitsWrapper> dictionary) throws IOException {
         byte[] data = new MapToArrayHelper(dictionary)
                 .addDictionary(tokens.size())
                 .addEncodedData(tokens)

@@ -1,5 +1,6 @@
 package es.elka.koda.app;
 
+import es.elka.koda.app.algorithm.BitsWrapper;
 import es.elka.koda.app.algorithm.HuffmanAlgorithm;
 import es.elka.koda.app.coder.Coder;
 import es.elka.koda.app.config.CommandConsole;
@@ -9,7 +10,6 @@ import es.elka.koda.app.file.FileToEncode;
 import es.elka.koda.app.file.PgmFileToEncode;
 
 import java.io.IOException;
-import java.util.BitSet;
 import java.util.List;
 
 public class Application {
@@ -52,7 +52,7 @@ public class Application {
         FileToEncode fileToEncode = new PgmFileToEncode(path);
         List<Byte> dataToEncode = fileToEncode.loadData();
         Coder coder = new Coder(huffmanAlgorithm);
-        List<BitSet> encodedData = coder.encode(dataToEncode);
+        List<BitsWrapper> encodedData = coder.encode(dataToEncode);
         String fileName = fileToEncode.getPath().getFileName().toString();
         EncodedFile encodedFileToSave = new EncodedFileImpl(fileName);
         encodedFileToSave.save(encodedData, huffmanAlgorithm.getDictionary());

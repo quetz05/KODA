@@ -1,8 +1,8 @@
 package es.elka.koda.app.coder;
 
 import es.elka.koda.app.algorithm.BitsWrapper;
+import es.elka.koda.app.util.BitSetUtil;
 
-import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,14 +30,14 @@ public class Coder {
      * a. zapisz nagłówek w którym zamieścisz słownik                                  //
      * b. zapisz zawartość zakodowanego pliku                                          //
      */
-    public List<BitSet> encode(List<Byte> data) {
+    public List<BitsWrapper> encode(List<Byte> data) {
         algorithmServer.initialize();
         data.stream().forEach(algorithmServer::addAndModify);
         algorithmServer.createDictionary();
         Map<Byte, BitsWrapper> dictionary = algorithmServer.getDictionary();
+        BitSetUtil.reverse(algorithmServer.getDictionary());
         return data.stream()
                 .map(dictionary::get)
-                .map(BitsWrapper::getBitSet)
                 .collect(Collectors.toList());
     }
 }

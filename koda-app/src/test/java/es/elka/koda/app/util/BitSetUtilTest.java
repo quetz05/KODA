@@ -1,5 +1,6 @@
 package es.elka.koda.app.util;
 
+import es.elka.koda.app.algorithm.BitsWrapper;
 import org.junit.Test;
 
 import java.util.BitSet;
@@ -39,6 +40,25 @@ public class BitSetUtilTest {
 
         byte data = BitSetUtil.moveBitsToLeftSideOfByte(bitSet);
 
+    }
+
+    @Test
+    public void testReverse() {
+        BitSet bitSet = new BitSet();
+        bitSet.set(0);
+        bitSet.set(1);
+        //110
+        BitsWrapper bitsWrapper = new BitsWrapper(bitSet, 3);
+        BitSetUtil.reverse(bitsWrapper);
+
+        BitSet expectedBitSet = new BitSet();
+        expectedBitSet.set(1);
+        expectedBitSet.set(2);
+        //011
+        BitsWrapper expectedBitsWrapper = new BitsWrapper(expectedBitSet, 3);
+
+        assertEquals(expectedBitsWrapper.getLength(), bitsWrapper.getLength());
+        assertEquals(expectedBitsWrapper.getBitSet(), bitsWrapper.getBitSet());
     }
 
 }

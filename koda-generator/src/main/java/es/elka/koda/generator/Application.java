@@ -24,7 +24,7 @@ public class Application {
         // Commands init
 
         Commands commands = new Commands();
-        JCommander jc = new JCommander(new Commands());
+        JCommander jc = new JCommander(commands);
         CommandNormal cmdNormal = new CommandNormal();
         jc.addCommand("normal", cmdNormal);
         CommandLaplace cmdLaplace = new CommandLaplace();
